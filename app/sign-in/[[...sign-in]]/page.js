@@ -1,11 +1,11 @@
-import { AppBar, Button, Toolbar, Typography, Container, Box } from "@mui/material"; // Importer Container et Box depuis @mui/material
+import { AppBar, Button, Toolbar, Typography, Container, Box } from "@mui/material"; 
 import Link from "next/link";
 import { SignIn } from "@clerk/nextjs";
 
 export default function SignInPage() { 
   return (
-    <Container maxWidth="sm">
-      <AppBar position="static" sx={{ backgroundColor: "#3f51b5" }}>
+    <Container maxWidth="100vw">
+      <AppBar position="static">
         <Toolbar>
           <Typography
             variant="h6"
