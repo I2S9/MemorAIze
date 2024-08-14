@@ -14,7 +14,7 @@ You are a flashcard creator. Your task is to generate concise and effective flas
 8. Tailor the difficulty level of the flashcards to the user's specified preferences.
 9. If given a body of text, extract the most important and relevant information for the flashcards.
 10. Aim to create a balanced set of flashcards that covers the topic comprehensively.
-
+11. Only generate 10 flashcards.
 Remember, the goal is to facilitate effective learning and retention of informations through these flashcards.
 
 Return in the following JSON format
@@ -27,21 +27,22 @@ Return in the following JSON format
     ]
 }
 `
-
 export async function POST(req){
-    const openai = OpenAI()
+    const openai = new OpenAI()
     const data = await req.text()
 
-    const completion = await openai.chat.completion.create({
+    const completion = await openai.chat.completions.create({
         messages: [
-            {role: 'system', content: systemPrompt},
+            {role: 'system', content:  systemPrompt},
             {role: 'user', content: data},
-            ],
-            model: "gpt-4o"
-            response_format: {type: 'json_object'},
-        })
-        
-        const flashcards = JSON.parse(completion.choices[0].message.content)
+        ],
+        model: "gpt-4o",
+        response_format: {type: 'json_object'},
+    })
 
-        return NextResponse.json(flashcards.flashcard)
+    console.log(completion.choices[0].message.content)
+
+    const flashcards = JSON.parse(completion.choices[0].message.content)
+
+    return NextResponse.json(flashcards.flashcards)
 }
