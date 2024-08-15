@@ -1,11 +1,16 @@
-import {NextResponse} from 'next/server'
+import { NextResponse } from 'next/server'
 import OpenAI from 'openai'
+
+const openai = new OpenAI({
+  baseURL: "https://openrouter.ai/api/v1",
+  apiKey: process.env.OPENROUTER_API_KEY,
+})
 
 const systemPrompt = `
 You are a flashcard creator. Your task is to generate concise and effective flashcards based on the given topic or content. Follow these guidelines
 
 1. Create clear and concise questions for the front of flashcard.
-2. Provide accurate and informative eanswers for the back of the flashcard.
+2. Provide accurate and informative answers for the back of the flashcard.
 3. Ensure that each flashcard focuses on a single concept or piece of information.
 4. Use simple language to make the flashcards accessible to a wide range of learners.
 5. Include a variety of question types, such as definitions, examples, comparisons, and applications.
@@ -27,22 +32,34 @@ Return in the following JSON format
     ]
 }
 `
-export async function POST(req){
-    const openai = new OpenAI()
-    const data = await req.text()
 
-    const completion = await openai.chat.completions.create({
-        messages: [
-            {role: 'system', content:  systemPrompt},
-            {role: 'user', content: data},
-        ],
-        model: "gpt-4o",
-        response_format: {type: 'json_object'},
-    })
+export async function POST(req) {
+    try {
+        const data = await req.text()
 
-    console.log(completion.choices[0].message.content)
+        const completion = await openai.chat.completions.create({
+            model: "meta-llama/llama-3.1-8b-instruct:free",
+            messages: [
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: data },
+            ],
+        })
 
-    const flashcards = JSON.parse(completion.choices[0].message.content)
+        const content = completion.choices[0].message.content
+        console.log('Response of the API:', content);
 
-    return NextResponse.json(flashcards.flashcards)
+        const jsonStart = content.indexOf('{');
+        const jsonEnd = content.lastIndexOf('}') + 1;
+
+        if (jsonStart !== -1 && jsonEnd !== -1) {
+            const jsonString = content.slice(jsonStart, jsonEnd);
+            const flashcards = JSON.parse(jsonString);
+            return NextResponse.json(flashcards);
+        } else {
+            throw new Error('Invalid JSON response');
+        }
+    } catch (error) {
+        console.error('Error in generating flashcards:', error);
+        return NextResponse.json({ error: 'Error in generating flashcards' }, { status: 500 });
+    }
 }
