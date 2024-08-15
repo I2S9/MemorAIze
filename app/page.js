@@ -72,13 +72,13 @@ export default function Home() {
   return (
     <Container maxWidth="100vw">
       <Head>
-        <title>Flashcard SaaS</title>
+        <title>MemorAIze</title>
         <meta name="description" content="Create flashcard from your text" />
       </Head>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" style={{ flexGrow: 1 }}>
-            Flashcard SaaS
+            MemorAIze
           </Typography>
           <SignedOut>
             <Button color="inherit" href="/sign-in">
@@ -101,10 +101,10 @@ export default function Home() {
           my: 4,
         }}
       >
-        <Typography variant="h2" gutterBottom>Welcome to Flashcard SaaS!</Typography>
+        <Typography variant="h2" gutterBottom>Welcome to MemorAIze!</Typography>
         <Typography variant="h5" gutterBottom>
           {''}
-          The easiest way to make flashcards from your text!
+          Smart Learning, Effortless Memorizing!
         </Typography>
         <Button onClick={getStarted} variant="contained" color="primary" sx={{ mt: 2 }}>
           Get Started
