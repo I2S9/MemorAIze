@@ -1,180 +1,164 @@
-'use client'
-import Image from 'next/image'
-import getStripe from '@/utils/get-stripe'
-import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
-import { AppBar, Box, Button, Container, Grid, Toolbar, Typography } from '@mui/material'
-import Head from 'next/head'
-import { useRouter } from 'next/navigation'
+'use client';
+
+import React from 'react';
+import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { AppBar, Box, Button, Container, Grid, Toolbar, Typography } from '@mui/material';
+import Head from 'next/head';
+import { useRouter } from 'next/navigation';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import './styles/globals.css';
+
+const theme = createTheme({
+  typography: {
+    fontFamily: 'Aptos Black, sans-serif',
+    h2: {
+      fontFamily: 'Porkys, sans-serif',
+      fontSize: '8.5rem',
+    },
+    h5: {
+      fontSize: '5rem',
+      color: '#E54792',
+      fontWeight: 'bold',
+    },
+  },
+  palette: {
+    primary: {
+      main: '#0F9ED5',
+    },
+    background: {
+      default: '#E5F4FB',
+    },
+  },
+  shape: {
+    borderRadius: 2,
+  },
+});
 
 export default function Home() {
-  const router = useRouter()
+  const router = useRouter();
 
-  const handleSubmitPro = async () => {
-    const checkoutSession = await fetch('/api/checkout_session', {
-      method: 'POST',
-      headers: {
-        origin: 'https://localhost:3000',
-        plan: "pro",
-      },
-      
-    })
+  // Go back to home
+  const handleHomeClick = () => {
+    router.push('/');
+  };
 
-    const checkoutSessionJson = await checkoutSession.json()
-
-    if (checkoutSession.statusCode === 500) {
-      console.error(checkoutSession.message)
-      return
-    }
-
-    const stripe = await getStripe()
-    const { error } = await stripe.redirectToCheckout({
-      sessionId: checkoutSessionJson.id,
-    })
-
-    if (error) {
-      console.warn(error.message)
-    }
-  }
-
-
-  const handleSubmitBasic = async () => {
-    const checkoutSession = await fetch('/api/checkout_session', {
-      method: 'POST',
-      headers: {
-        origin: 'https://localhost:3000',
-        plan: "basic",
-      },
-      
-    })
-
-    const checkoutSessionJson = await checkoutSession.json()
-
-    if (checkoutSession.statusCode === 500) {
-      console.error(checkoutSession.message)
-      return
-    }
-
-    const stripe = await getStripe()
-    const { error } = await stripe.redirectToCheckout({
-      sessionId: checkoutSessionJson.id,
-    })
-
-    if (error) {
-      console.warn(error.message)
-    }
-  }
-
-
+  // Go to generate page
   const getStarted = async () => {
-    router.push('/generate')
-  }
+    router.push('/generate');
+  };
 
   return (
-    <Container maxWidth="100vw">
-      <Head>
-        <title>MemorAIze</title>
-        <meta name="description" content="Create flashcard from your text" />
-      </Head>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" style={{ flexGrow: 1 }}>
-            MemorAIze
-          </Typography>
-          <SignedOut>
-            <Button color="inherit" href="/sign-in">
-              {''}
-              Log In
-            </Button>
-            <Button color="inherit" href="sign-up">
-              Sign Up
-            </Button>
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
-        </Toolbar>
-      </AppBar>
+    <ThemeProvider theme={theme}>
+      <Container maxWidth="100vw" sx={{ backgroundColor: '#E5F4FB', height: '100vh', p: 0 }}>
+        <Head>
+          <title>Memoraize</title>
+          <meta name="description" content="Create flashcard from your text" />
+          {/* For MM icon */}
+          <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'><text x='8' y='48' font-family='Porkys' font-size='48' fill='%230F9ED5'>M</text><text x='32' y='48' font-family='Porkys' font-size='48' fill='%23E54792'>M</text></svg>" />
+        </Head>
+        <AppBar position="static" color="transparent" elevation={0}>
+          <Toolbar>
+            {/* MM Button at the top */}
+            <Button
+              onClick={handleHomeClick}
+              sx={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                mt: 2,
+                ml: 2,
+                padding: 0,
+                minWidth: 'auto',
+                height: 'auto',
+                fontFamily: "Porkys, sans-serif",
+                fontSize: '2.5rem',
+                textTransform: 'none',
+                color: '#0F9ED5',
+                ':after': {
+                  content: '"M"',
+                  display: 'inline-block',
+                  fontFamily: 'Porkys, sans-serif',
+                  fontSize: '2.5rem',
+                  color: '#0F9ED5',
+                  marginRight: '-0.5rem',
+                },
+                ':before': {
+                  content: '"M"',
+                  display: 'inline-block',
+                  fontFamily: 'Porkys, sans-serif',
+                  fontSize: '2.5rem',
+                  color: '#E54792',
+                }
+              }}
+            />
+            <Box sx={{ flexGrow: 1 }} />
+            <SignedOut>
+              <Button color="primary" variant="contained" href="/sign-in" sx={{ color: 'white', fontWeight: 'bold', borderRadius: 5 }}>
+                Log In
+              </Button>
+              <Button color="primary" variant="contained" href="/sign-up" sx={{ color: 'white', fontWeight: 'bold', borderRadius: 5, ml: 2 }}>
+                Sign Up
+              </Button>
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </Toolbar>
+        </AppBar>
 
-      <Box
-        sx={{
-          textAlign: 'center',
-          my: 4,
-        }}
-      >
-        <Typography variant="h2" gutterBottom>Welcome to MemorAIze!</Typography>
-        <Typography variant="h5" gutterBottom>
-          {''}
-          Smart Learning, Effortless Memorizing!
-        </Typography>
-        <Button onClick={getStarted} variant="contained" color="primary" sx={{ mt: 2 }}>
-          Get Started
-        </Button>
-      </Box>
-      <Box sx={{ my: 6 }}>
-        <Typography textAlign="center" variant="h4" gutterBottom>Features</Typography>
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={4}>
-            <Typography variant="h6" gutterBottom>Easy Text Input</Typography>
-            <Typography>
-              {''}
-              Simply input your text and let our software do the rest. Creating flashcards has never been easier.
-            </Typography>
+        <Box
+          sx={{
+            textAlign: 'center',
+            my: 4,
+            backgroundColor: '#E5F4FB',
+          }}
+        >
+          <Typography variant="h2" gutterBottom>
+            <span style={{ color: '#E54792' }}>Memor</span>
+            <span style={{ color: '#0F9ED5' }}>ai</span>
+            <span style={{ color: '#E54792' }}>ze</span>
+          </Typography>
+          <Typography
+            variant="h5"
+            gutterBottom
+            sx={{ 
+              color: '#0F9ED5', 
+              fontSize: '2rem', 
+              fontWeight: 'bold', 
+              mt: -3,
+              mb: 2 
+            }} 
+          >
+            Smart Learning, Effortless Memorizing!
+          </Typography>
+          <Button onClick={getStarted} variant="contained" sx={{ mt: 2, backgroundColor: '#E54792', fontWeight: 'bold', borderRadius: 5 }}>
+            Get Started
+          </Button>
+        </Box>
+
+        <Box sx={{ my: 6, p: 4, backgroundColor: '#0F9ED5', borderRadius: 5 }}>
+          <Typography textAlign="center" variant="h4" gutterBottom sx={{ color: 'white', fontWeight: 'bold' }}>
+            Features
+          </Typography>
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={2}>
+              <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>1. XXXXXX</Typography>
+            </Grid>
+            <Grid item xs={12} md={2}>
+              <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>2. XXXXXX</Typography>
+            </Grid>
+            <Grid item xs={12} md={2}>
+              <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>3. XXXXXX</Typography>
+            </Grid>
+            <Grid item xs={12} md={2}>
+              <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>4. XXXXXX</Typography>
+            </Grid>
+            <Grid item xs={12} md={2}>
+              <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>5. XXXXXX</Typography>
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={4}>
-            <Typography variant="h6" gutterBottom>Smart Flashcards</Typography>
-            <Typography>
-              {''}
-              Our AI intelligently breaks down your text into concise flashcards, perfect for studying.
-            </Typography>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <Typography variant="h6" gutterBottom>Accessible Anywhere</Typography>
-            <Typography>
-              {''}
-              Access your flashcards from any device, at any time. Study on the go with ease.
-            </Typography>
-          </Grid>
-        </Grid>
-      </Box>
-      <Box sx={{ my: 6, textAlign: 'center' }}>
-        <Typography variant="h4" gutterBottom>Pricing</Typography>
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={6}>
-            <Box sx={{
-              p: 3,
-              border: '1px solid',
-              borderColor: 'grey.300',
-              borderRadius: 2,
-            }}
-            >
-              <Typography variant="h5" gutterBottom>Basic</Typography>
-              <Typography variant="h6" gutterBottom>$5 / month</Typography>
-              <Typography>
-                {''}
-                Access to basic flashcard features and limited storage.
-              </Typography>
-              <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={handleSubmitBasic}>Choose Basic</Button>
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Box sx={{
-              p: 3,
-              border: '1px solid',
-              borderColor: 'grey.300',
-              borderRadius: 2,
-            }}
-            >
-              <Typography variant="h5" gutterBottom>Pro</Typography>
-              <Typography variant="h6" gutterBottom>$10 / month</Typography>
-              <Typography>
-                {''}
-                Unlimited flashcards and storage, with priority support.
-              </Typography>
-              <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={handleSubmitPro}>Choose Pro</Button>
-            </Box>
-          </Grid>
-        </Grid>
-      </Box>
-    </Container>
-  )
+        </Box>
+      </Container>
+    </ThemeProvider>
+  );
 }

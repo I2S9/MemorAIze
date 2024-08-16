@@ -12,7 +12,9 @@ Upcoming soon!
 
 ## Getting Started 📚
 
-Upcoming soon!
+```
+npm i framer-motion clsx tailwind-merge
+```
 
 ## Features 🌟
 

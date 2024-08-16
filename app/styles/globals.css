@@ -1,0 +1,10 @@
+@font-face {
+  font-family: 'Porkys';
+  src: url('/fonts/Porkys.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Aptos Black, sans-serif';
+}
