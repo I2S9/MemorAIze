@@ -13,7 +13,7 @@ const theme = createTheme({
     fontFamily: 'Aptos Black, sans-serif',
     h2: {
       fontFamily: 'Porkys, sans-serif',
-      fontSize: '8.5rem',
+      fontSize: '9.5rem',
     },
     h5: {
       fontSize: '5rem',
@@ -125,7 +125,7 @@ export default function Home() {
               color: '#0F9ED5', 
               fontSize: '2rem', 
               fontWeight: 'bold', 
-              mt: -3,
+              mt: -8,
               mb: 2 
             }} 
           >
@@ -136,28 +136,79 @@ export default function Home() {
           </Button>
         </Box>
 
-        <Box sx={{ my: 6, p: 4, backgroundColor: '#0F9ED5', borderRadius: 5 }}>
-          <Typography textAlign="center" variant="h4" gutterBottom sx={{ color: 'white', fontWeight: 'bold' }}>
+        <Box sx={{ my: 10, p: 4, backgroundColor: '#0F9ED5', borderRadius: 5, px: 4 }}>
+          <Typography textAlign="center" variant="h4" gutterBottom sx={{ color: 'white', fontWeight: 'bold', mb: 3 }}>
             Features
           </Typography>
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={2}>
-              <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>1. XXXXXX</Typography>
+          <Grid container spacing={4} justifyContent="center">
+            <Grid item xs={12} sm={6} md={2} sx={{ px: 1 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', height: '100%' }}>
+                <Typography variant="h6" gutterBottom sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                  <strong>Flashcard Organization</strong>
+                </Typography>
+                <Typography variant="body1" sx={{ color: 'white', mb: 1 }}>
+                  Intuitive structure for users to manage their flashcards.
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'white' }}>
+                  Search bar to quickly find specific flashcards or sets. Enable categorization and tagging of flashcards for better organization.
+                </Typography>
+              </Box>
             </Grid>
-            <Grid item xs={12} md={2}>
-              <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>2. XXXXXX</Typography>
+            <Grid item xs={12} sm={6} md={2} sx={{ px: 1 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', height: '100%' }}>
+                <Typography variant="h6" gutterBottom sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                  <strong>AI-Powered Learning</strong>
+                </Typography>
+                <Typography variant="body1" sx={{ color: 'white', mb: 1 }}>
+                  Implement AI-driven adaptive learning to enhance memorization.
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'white' }}>
+                  Use AI to track user performance and adjust the frequency of flashcard appearances. Implement spaced repetition algorithms to optimize learning schedules.
+                </Typography>
+              </Box>
             </Grid>
-            <Grid item xs={12} md={2}>
-              <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>3. XXXXXX</Typography>
+            <Grid item xs={12} sm={6} md={2} sx={{ px: 1, display: 'flex', justifyContent: 'center' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', height: '100%' }}>
+                <Typography variant="h6" gutterBottom sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                  <strong>Calendar Integration</strong>
+                </Typography>
+                <Typography variant="body1" sx={{ color: 'white', mb: 1 }}>
+                  Sync calendar events with flashcard revision notifications.
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'white' }}>
+                  Integrate a calendar feature for scheduling study sessions and setting reminders.
+                </Typography>
+              </Box>
             </Grid>
-            <Grid item xs={12} md={2}>
-              <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>4. XXXXXX</Typography>
+            <Grid item xs={12} sm={6} md={2} sx={{ px: 1 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', height: '100%' }}>
+                <Typography variant="h6" gutterBottom sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                  <strong>Analytics Dashboard</strong>
+                </Typography>
+                <Typography variant="body1" sx={{ color: 'white', mb: 1 }}>
+                  Provide users with insights into their learning progress.
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'white' }}>
+                  Design a dashboard that displays key metrics such as time spent studying, quiz scores, and mastery levels. Include visual aids like graphs and charts to illustrate progress trends.
+                </Typography>
+              </Box>
             </Grid>
-            <Grid item xs={12} md={2}>
-              <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>5. XXXXXX</Typography>
+            <Grid item xs={12} sm={6} md={2} sx={{ px: 1 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', height: '100%' }}>
+                <Typography variant="h6" gutterBottom sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                  <strong>Multimedia Support</strong>
+                </Typography>
+                <Typography variant="body1" sx={{ color: 'white', mb: 1 }}>
+                  Enhance the learning experience by supporting various media types.
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'white' }}>
+                  Enable users to upload and incorporate videos, PDFs, and audio into flashcards.
+                </Typography>
+              </Box>
             </Grid>
           </Grid>
         </Box>
+
       </Container>
     </ThemeProvider>
   );
