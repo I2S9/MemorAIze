@@ -17,6 +17,10 @@ import {
   CardContent,
   Dialog,
   DialogTitle,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import {
   collection,
@@ -36,15 +40,26 @@ export default function Generate() {
   const [text, setText] = useState("");
   const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
+  const [numFlashcards, setNumFlashcards] = useState(12);
+  const [answerType, setAnswerType] = useState("True or False");
   const router = useRouter();
 
   const handleSubmit = async () => {
     fetch("/api/generate", {
       method: "POST",
-      body: text,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ data: text, numFlashcards, answerType }),
     })
       .then((res) => res.json())
-      .then((data) => setFlashcards(data.flashcards));
+      .then((data) => {
+        if (data.flashcards) {
+          setFlashcards(data.flashcards);
+        } else {
+          console.error('Error:', data.error);
+        }
+      });
   };
 
   const handleCardClick = (id) => {
@@ -118,6 +133,33 @@ export default function Generate() {
             variant="outlined"
             sx={{ mb: 2 }}
           />
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel>Number of Flashcards</InputLabel>
+            <Select
+              value={numFlashcards}
+              onChange={(e) => setNumFlashcards(e.target.value)}
+              label="Number of Flashcards"
+            >
+              {[...Array(100).keys()].map((num) => (
+                <MenuItem key={num + 1} value={num + 1}>
+                  {num + 1}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel>Answer Type</InputLabel>
+            <Select
+              value={answerType}
+              onChange={(e) => setAnswerType(e.target.value)}
+              label="Answer Type"
+            >
+              <MenuItem value="Informative but crisp">Informative but crisp</MenuItem>
+              <MenuItem value="One word">One word</MenuItem>
+              <MenuItem value="True or False">True or False</MenuItem>
+              <MenuItem value="Numerical">Numerical</MenuItem>
+            </Select>
+          </FormControl>
           <Button
             variant="contained"
             color="primary"
@@ -220,3 +262,6 @@ export default function Generate() {
     </Container>
   );
 }
+
+
+
