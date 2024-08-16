@@ -1,10 +1,10 @@
-import { NextResponse } from 'next/server'
-import OpenAI from 'openai'
+import { NextResponse } from 'next/server';
+import OpenAI from 'openai';
 
 const openai = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
   apiKey: process.env.OPENROUTER_API_KEY,
-})
+});
 
 const systemPrompt = `
 You are a flashcard creator. Your task is to generate concise and effective flashcards based on the given topic or content. Follow these guidelines
@@ -31,35 +31,39 @@ Return in the following JSON format
         }
     ]
 }
-`
+`;
 
 export async function POST(req) {
-    try {
-        const data = await req.text()
+  try {
+    const data = await req.text();
 
-        const completion = await openai.chat.completions.create({
-            model: "meta-llama/llama-3.1-8b-instruct:free",
-            messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: data },
-            ],
-        })
+    const completion = await openai.chat.completions.create({
+      model: "meta-llama/llama-3.1-8b-instruct:free",
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: data },
+      ],
+    });
 
-        const content = completion.choices[0].message.content
-        console.log('Response of the API:', content);
+    const content = completion.choices[0].message.content;
+    console.log('Response of the API:', content);
 
-        const jsonStart = content.indexOf('{');
-        const jsonEnd = content.lastIndexOf('}') + 1;
-
-        if (jsonStart !== -1 && jsonEnd !== -1) {
-            const jsonString = content.slice(jsonStart, jsonEnd);
-            const flashcards = JSON.parse(jsonString);
-            return NextResponse.json(flashcards);
-        } else {
-            throw new Error('Invalid JSON response');
-        }
-    } catch (error) {
-        console.error('Error in generating flashcards:', error);
-        return NextResponse.json({ error: 'Error in generating flashcards' }, { status: 500 });
+    // Use regex to extract JSON part
+    const jsonMatch = content.match(/{[\s\S]*}/);
+    if (jsonMatch) {
+      const jsonString = jsonMatch[0];
+      const flashcards = JSON.parse(jsonString);
+      return NextResponse.json(flashcards);
+    } else {
+      throw new Error('Invalid JSON response');
     }
+  } catch (error) {
+    console.error('Error in generating flashcards:', error);
+    return NextResponse.json({ error: 'Error in generating flashcards' }, { status: 500 });
+  }
 }
+
+
+
+
+
