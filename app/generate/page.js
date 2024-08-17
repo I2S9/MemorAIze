@@ -1,5 +1,4 @@
-'use client';
-
+"use client";
 import { useUser, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import {
   Box,
@@ -52,12 +51,15 @@ const theme = createTheme({
     primary: {
       main: '#0F9ED5',
     },
+    secondary: {
+      main: '#E54792',
+    },
     background: {
       default: '#E5F4FB',
     },
   },
   shape: {
-    borderRadius: 2,
+    borderRadius: 2, 
   },
 });
 
@@ -204,17 +206,29 @@ export default function Generate() {
           <Container maxWidth="md" sx={{ mt: 4, mb: 6 }}>
             <Box
               sx={{
-                mt: 4,
+                mt: 6, 
                 mb: 6,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                justifyContent: "center",
+                height: '80vh', 
               }}
             >
-              <Typography variant="h4" sx={{ color: '#0F9ED5', fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>
+              <Typography variant="h4" sx={{ color: '#E54792', fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0,0,0,0.3)', mb: 4 }}>
                 Generate Flashcards
               </Typography>
-              <Paper sx={{ p: 4, width: "100%", borderRadius: 5, backgroundColor: '#E5F4FB', boxShadow: 3 }}>
+              <Paper sx={{
+                p: 4,
+                width: "100%",
+                maxWidth: '800px', 
+                borderRadius: 8, 
+                backgroundColor: '#0F9ED5',
+                boxShadow: 3,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
+              }}>
                 <TextField
                   value={text}
                   onChange={(e) => setText(e.target.value)}
@@ -223,16 +237,25 @@ export default function Generate() {
                   multiline
                   rows={4}
                   variant="outlined"
-                  sx={{ mb: 2 }}
+                  sx={{
+                    mb: 3, 
+                    backgroundColor: '#E5F4FB', 
+                    '& .MuiOutlinedInput-root': { borderRadius: 2 },
+                    '& .MuiInputLabel-root': { color: '#000' }
+                  }}
                 />
-                <FormControl fullWidth sx={{ mb: 2 }}>
-                  <InputLabel>Language</InputLabel>
+                <FormControl fullWidth sx={{ mb: 3 }}> 
+                  <InputLabel sx={{ color: '#000' }}>Language</InputLabel>
                   <Select
                     value={lang}
                     onChange={(e) => setLang(e.target.value)}
                     label="Language"
+                    sx={{
+                      backgroundColor: '#E5F4FB', 
+                      '& .MuiOutlinedInput-root': { borderRadius: 8 },
+                      '& .MuiInputLabel-root': { color: '#000' }
+                    }}
                   >
-                    {/* Liste des langues */}
                     <MenuItem value="Arabic">Arabic</MenuItem>
                     <MenuItem value="Bengali">Bengali</MenuItem>
                     <MenuItem value="Chinese Mandarin">Chinese Mandarin</MenuItem>
@@ -248,8 +271,8 @@ export default function Generate() {
                     <MenuItem value="Spanish">Spanish</MenuItem>
                   </Select>
                 </FormControl>
-                <Grid container spacing={2} sx={{ mb: 2 }}>
-                  <Grid item xs={6}>
+                <Grid container spacing={3} sx={{ mb: 3 }}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       value={numFlashcards}
                       onChange={(e) => setNumFlashcards(e.target.value)}
@@ -257,15 +280,25 @@ export default function Generate() {
                       type="number"
                       fullWidth
                       variant="outlined"
+                      sx={{
+                        backgroundColor: '#E5F4FB', 
+                        '& .MuiOutlinedInput-root': { borderRadius: 2 },
+                        '& .MuiInputLabel-root': { color: '#000' }
+                      }}
                     />
                   </Grid>
-                  <Grid item xs={6}>
+                  <Grid item xs={12} sm={6}>
                     <FormControl fullWidth>
-                      <InputLabel>Answer Type</InputLabel>
+                      <InputLabel sx={{ color: '#000' }}>Answer Type</InputLabel>
                       <Select
                         value={answerType}
                         onChange={(e) => setAnswerType(e.target.value)}
                         label="Answer Type"
+                        sx={{
+                          backgroundColor: '#E5F4FB', 
+                          '& .MuiOutlinedInput-root': { borderRadius: 8 },
+                          '& .MuiInputLabel-root': { color: '#000' }
+                        }}
                       >
                         <MenuItem value="True or False">True or False</MenuItem>
                         <MenuItem value="Multiple Choice">Multiple Choice</MenuItem>
@@ -274,19 +307,24 @@ export default function Generate() {
                     </FormControl>
                   </Grid>
                 </Grid>
-                <FormControl fullWidth sx={{ mb: 2 }}>
-                  <InputLabel>Difficulty</InputLabel>
+                <FormControl fullWidth sx={{ mb: 3 }}>
+                  <InputLabel sx={{ color: '#000' }}>Difficulty</InputLabel>
                   <Select
                     value={difficulty}
                     onChange={(e) => setDifficulty(e.target.value)}
                     label="Difficulty"
+                    sx={{
+                      backgroundColor: '#E5F4FB', 
+                      '& .MuiOutlinedInput-root': { borderRadius: 2 },
+                      '& .MuiInputLabel-root': { color: '#000' }
+                    }}
                   >
                     <MenuItem value="Easy">Easy</MenuItem>
                     <MenuItem value="Medium">Medium</MenuItem>
                     <MenuItem value="Hard">Hard</MenuItem>
                   </Select>
                 </FormControl>
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                   <Button
                     onClick={handleSubmit}
                     variant="contained"
@@ -303,9 +341,10 @@ export default function Generate() {
                   </Button>
                 </Box>
               </Paper>
+
               {flashcards.length > 0 && (
                 <Box sx={{ mt: 4, width: "100%" }}>
-                  <Typography variant="h4" sx={{ mb: 2, color: '#0F9ED5' }}>
+                  <Typography variant="h4" sx={{ mb: 2, color: '#0F9ED5', fontWeight: 'bold' }}>
                     Flashcards Preview
                   </Typography>
                   <Grid container spacing={2}>
@@ -318,6 +357,7 @@ export default function Generate() {
                             transformStyle: "preserve-3d",
                             transition: "transform 0.6s",
                             boxShadow: 3,
+                            borderRadius: 8,
                           }}
                         >
                           <CardActionArea>
@@ -329,7 +369,7 @@ export default function Generate() {
                                 alignItems: "center",
                                 backgroundColor: flipped[index] ? "#E54792" : "#0F9ED5",
                                 color: "white",
-                                borderRadius: 5,
+                                borderRadius: 8,
                                 backfaceVisibility: "hidden",
                               }}
                             >
@@ -372,6 +412,7 @@ export default function Generate() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         variant="outlined"
+                        sx={{ borderRadius: 8 }}
                       />
                     </DialogContent>
                     <DialogActions>
