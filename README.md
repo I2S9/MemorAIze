@@ -1,6 +1,6 @@
 ## 🧠 MemorAIze
 
-![alt text](memoraize.png)
+![alt text](memoraize-1.png)
 
 **MemorAIze** is a cutting-edge flashcard SaaS designed to enhance learning and memory retention through AI-powered features. Built with Next.js, Clerk, Firebase, OpenAI, and Stripe, MemorAIze offers users a smart and efficient way to create, manage, and learn from flashcards.
 
@@ -25,11 +25,13 @@
 To get started with MemorAIze, clone the repository and install the required dependencies:
 
 ```bash
-git clone <repository-url>
-cd <repository-directory>
+git clone <https://github.com/I2S9/MemorAIze>
+cd MemorAIze
 npm install
 npm install framer-motion clsx tailwind-merge
 ```
+
+Configure the Llama API key.
 
 ## Features 🌟
 
