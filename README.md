@@ -1,4 +1,4 @@
-## 🧠 MemorAIze
+## MemorAIze 🧠
 
 ![alt text](memoraize-1.png)
 
@@ -25,7 +25,7 @@
 To get started with MemorAIze, clone the repository and install the required dependencies:
 
 ```bash
-git clone <https://github.com/I2S9/MemorAIze>
+git clone git@github.com:I2S9/MemorAIze.git
 cd MemorAIze
 npm install
 npm install framer-motion clsx tailwind-merge
