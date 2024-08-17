@@ -40,8 +40,10 @@ export default function Generate() {
   const [text, setText] = useState("");
   const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
-  const [numFlashcards, setNumFlashcards] = useState(12);
+  const [numFlashcards, setNumFlashcards] = useState(10);
   const [answerType, setAnswerType] = useState("True or False");
+  const [difficulty, setDifficulty] = useState("Medium");
+  const [lang, setLang] = useState("English");
   const router = useRouter();
 
   const handleSubmit = async () => {
@@ -50,7 +52,7 @@ export default function Generate() {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ data: text, numFlashcards, answerType }),
+      body: JSON.stringify({ data: text, lang, numFlashcards, difficulty, answerType }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -134,6 +136,46 @@ export default function Generate() {
             sx={{ mb: 2 }}
           />
           <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel>Language</InputLabel>
+            <Select
+              value={lang}
+              onChange={(e) => setLang(e.target.value)}
+              label="Language"
+            >
+              <MenuItem value="Arabic">Arabic</MenuItem>
+              <MenuItem value="Bengali">Bengali</MenuItem>
+              <MenuItem value="Chinese Mandarin">Chinese Mandarin</MenuItem>
+              <MenuItem value="English">English</MenuItem>
+              <MenuItem value="French">French</MenuItem>
+              <MenuItem value="German">German</MenuItem>
+              <MenuItem value="Hindi">Hindi</MenuItem>
+              <MenuItem value="Italian">Italian</MenuItem>
+              <MenuItem value="Japanese">Japanese</MenuItem>
+              <MenuItem value="Korean">Korean</MenuItem>
+              <MenuItem value="Portuguese">Portuguese</MenuItem>
+              <MenuItem value="Russian">Russian</MenuItem>
+              <MenuItem value="Spanish">Spanish</MenuItem>
+              <MenuItem value="Urdu">Urdu</MenuItem>
+              <MenuItem value="Indonesian">Indonesian</MenuItem>
+              <MenuItem value="Turkish">Turkish</MenuItem>
+              <MenuItem value="Vietnamese">Vietnamese</MenuItem>
+              <MenuItem value="Persian">Persian</MenuItem>
+              <MenuItem value="Swahili">Swahili</MenuItem>
+              <MenuItem value="Tamil">Tamil</MenuItem>
+              <MenuItem value="Marathi">Marathi</MenuItem>
+              <MenuItem value="Telugu">Telugu</MenuItem>
+              <MenuItem value="Punjabi">Punjabi</MenuItem>
+              <MenuItem value="Javanese">Javanese</MenuItem>
+              <MenuItem value="Thai">Thai</MenuItem>
+              <MenuItem value="Gujarati">Gujarati</MenuItem>
+              <MenuItem value="Kannada">Kannada</MenuItem>
+              <MenuItem value="Malayalam">Malayalam</MenuItem>
+              <MenuItem value="Odia">Odia</MenuItem>
+              <MenuItem value="Burmese">Burmese</MenuItem>
+              {/* Add more languages as needed */}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth sx={{ mb: 2 }}>
             <InputLabel>Number of Flashcards</InputLabel>
             <Select
               value={numFlashcards}
@@ -148,6 +190,18 @@ export default function Generate() {
             </Select>
           </FormControl>
           <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel>Difficulty</InputLabel>
+            <Select
+              value={difficulty}
+              onChange={(e) => setDifficulty(e.target.value)}
+              label="Difficulty"
+            >
+              <MenuItem value="Easy">Easy</MenuItem>
+              <MenuItem value="Medium">Medium</MenuItem>
+              <MenuItem value="Hard">Hard</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl fullWidth sx={{ mb: 2 }}>
             <InputLabel>Answer Type</InputLabel>
             <Select
               value={answerType}
@@ -158,6 +212,7 @@ export default function Generate() {
               <MenuItem value="One word">One word</MenuItem>
               <MenuItem value="True or False">True or False</MenuItem>
               <MenuItem value="Numerical">Numerical</MenuItem>
+              <MenuItem value="Picture">Picture</MenuItem>
             </Select>
           </FormControl>
           <Button
@@ -262,6 +317,8 @@ export default function Generate() {
     </Container>
   );
 }
+
+
 
 
 
