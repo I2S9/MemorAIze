@@ -6,8 +6,8 @@ const openai = new OpenAI({
   apiKey: process.env.OPENROUTER_API_KEY,
 });
 
-const systemPrompt = `
-You are a flashcard creator. Your task is to generate concise and effective flashcards based on the given topic or content. Follow these guidelines
+const systemPrompt = 
+`You are a flashcard creator. Your task is to generate concise and effective flashcards based on the given topic or content. Follow these guidelines:
 
 1. Create clear and concise questions for the front of flashcard.
 2. Provide accurate and informative answers for the back of the flashcard.
@@ -30,8 +30,34 @@ Return in the following JSON format
         "back": str
         }
     ]
-}
-`;
+}`;
+
+const generateImage = async (prompt) => {
+  const apiKey = "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";
+  const apiUrl = 'https://api-inference.huggingface.co/models/prompthero/openjourney-v4';
+
+  const response = await fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      inputs: prompt,
+      options: {
+        wait_for_model: true
+      }
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to generate image');
+  }
+
+  const blob = await response.blob();
+  const imageUrl = URL.createObjectURL(blob);
+  return imageUrl;
+};
 
 export async function POST(req) {
   try {
@@ -53,6 +79,14 @@ export async function POST(req) {
     if (jsonMatch) {
       const jsonString = jsonMatch[0];
       const flashcards = JSON.parse(jsonString);
+
+      // Check for "Picture" answer type and generate images
+      for (const flashcard of flashcards.flashcards) {
+        if (flashcard.back.toLowerCase() === "picture") {
+          flashcard.back = await generateImage(flashcard.front);
+        }
+      }
+
       return NextResponse.json(flashcards);
     } else {
       throw new Error('Invalid JSON response');
@@ -62,6 +96,14 @@ export async function POST(req) {
     return NextResponse.json({ error: 'Error in generating flashcards' }, { status: 500 });
   }
 }
+
+
+
+
+
+
+
+
 
 
 
