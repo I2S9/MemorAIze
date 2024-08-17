@@ -47,7 +47,6 @@ export default function Flashcards() {
         flashcards.push({ id: doc.id, ...doc.data() });
       });
 
-      // Filter and sort flashcards based on search query and sort order
       const filteredFlashcards = flashcards.filter(flashcard =>
         flashcard.front.toLowerCase().includes(searchQuery.toLowerCase()) ||
         flashcard.back.toLowerCase().includes(searchQuery.toLowerCase())
@@ -55,9 +54,9 @@ export default function Flashcards() {
 
       filteredFlashcards.sort((a, b) => {
         if (sortOrder === 'date') {
-          return a.date - b.date; // Assuming you have a `date` field
+          return a.date - b.date; 
         } else if (sortOrder === 'thematic') {
-          return a.thematic.localeCompare(b.thematic); // Assuming you have a `thematic` field
+          return a.thematic.localeCompare(b.thematic);
         } else {
           return a.front.localeCompare(b.front);
         }
@@ -137,7 +136,7 @@ export default function Flashcards() {
       <Box sx={{ mt: 4, mb: 6, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         {!search ? (
           <>
-            <Typography variant="h4" gutterBottom sx={{ color: '#E54792', fontWeight: 'bold' }}>
+            <Typography variant="h4" sx={{ color: '#E54792', fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0,0,0,0.3)', mb: 4 }}>
               Your Flashcard Collections
             </Typography>
             {collections.length === 0 ? (
@@ -223,7 +222,13 @@ export default function Flashcards() {
                               padding: 2,
                               boxSizing: 'border-box',
                             },
+                            '& > div > div:nth-of-type(1)': {
+                              backgroundColor: '#0F9ED5',
+                              color: 'white',
+                            },
                             '& > div > div:nth-of-type(2)': {
+                              backgroundColor: '#E54792',
+                              color: 'white',
                               transform: 'rotateY(180deg)',
                             },
                           }}
