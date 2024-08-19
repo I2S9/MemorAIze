@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
-import { AppBar, Box, Button, Container, Grid, Toolbar, Typography, Paper } from '@mui/material';
+import { AppBar, Box, Button, Container, Grid, Toolbar, Typography, Paper, Card, CardContent } from '@mui/material';
 import Head from 'next/head';
 import { useRouter } from 'next/navigation';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -65,6 +65,24 @@ const features = [
   },
 ];
 
+const pricingPlans = [
+  {
+    title: 'Basic',
+    price: 'Free',
+    features: ['Limited Flashcards', 'Basic Analytics', 'Community Support'],
+  },
+  {
+    title: 'Pro',
+    price: '$9.99/month',
+    features: ['Unlimited Flashcards', 'Advanced Analytics', 'Priority Support', 'AI-Powered Learning'],
+  },
+  {
+    title: 'Enterprise',
+    price: 'Contact Us',
+    features: ['Customized Solutions', 'Dedicated Support', 'Team Collaboration Tools', 'Advanced Security Features'],
+  },
+];
+
 export default function Home() {
   const router = useRouter();
   const [flipped, setFlipped] = useState(Array(features.length).fill(false));
@@ -89,6 +107,10 @@ export default function Home() {
     router.push('/flashcards');
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ backgroundColor: '#E5F4FB', minHeight: '100vh' }}>
@@ -96,12 +118,10 @@ export default function Home() {
           <Head>
             <title>Memoraize</title>
             <meta name="description" content="Create flashcard from your text" />
-            {/* For MM icon */}
             <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'><text x='8' y='48' font-family='Porkys' font-size='48' fill='%230F9ED5'>M</text><text x='32' y='48' font-family='Porkys' font-size='48' fill='%23E54792'>M</text></svg>" />
           </Head>
           <AppBar position="static" color="transparent" elevation={0}>
             <Toolbar>
-              {/* MM Button at the top */}
               <Button
                 onClick={handleHomeClick}
                 sx={{
@@ -183,12 +203,10 @@ export default function Home() {
           </Box>
 
           <Box sx={{ my: 10, p: 4, backgroundColor: '#E5F4FB', borderRadius: 5, px: 4, boxShadow: 3 }}>
-            <Typography textAlign="center" variant="h4" gutterBottom sx={{ color: '#0F9ED5', mb: 3, textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>
-              <span className="hover-effect">
-                {Array.from("Features").map((letter, index) => (
-                  <span key={index} className="hover-letter">{letter}</span>
-                ))}
-              </span>
+            <Typography textAlign="center" variant="h4" gutterBottom sx={{ color: '#0F9ED5', mb: 6, textShadow: '2px 2px 4px rgba(0,0,0,0.3)', fontSize: '3rem', fontWeight: 'bold' }}>
+              {Array.from("Features").map((letter, index) => (
+                <span key={index} className="hover-letter">{letter}</span>
+              ))}
             </Typography>
             <Grid container spacing={4} justifyContent="center">
               {features.map((feature, index) => (
@@ -216,6 +234,7 @@ export default function Home() {
                         fontSize: '1.2rem', 
                         overflowWrap: 'break-word', 
                         padding: '0 10px', 
+                        fontWeight: 'bold', // Text in bold
                       }}
                     >
                       <Typography variant="body1" sx={{ mb: 1 }}>
@@ -239,6 +258,7 @@ export default function Home() {
                         alignItems: 'center',
                         color: 'white',
                         textAlign: 'center',
+                        fontWeight: 'bold', 
                       }}
                     >
                       <Typography variant="h6" gutterBottom sx={{ color: 'white', fontWeight: 'bold', textAlign: 'center', mb: 2 }}>
@@ -249,6 +269,55 @@ export default function Home() {
                 </Grid>
               ))}
             </Grid>
+          </Box>
+
+          {/* Pricing Section */}
+          <Box sx={{ my: 10, py: 6, backgroundColor: '#E5F4FB', borderRadius: 5, px: 4, boxShadow: 3 }}>
+            <Typography variant="h4" textAlign="center" gutterBottom sx={{ color: '#0F9ED5', mb: 6, textShadow: '2px 2px 4px rgba(0,0,0,0.3)', fontSize: '3rem', fontWeight: 'bold' }}>
+              {Array.from("Pricing").map((letter, index) => (
+                <span key={index} className="hover-letter">{letter}</span>
+              ))}
+            </Typography>
+            <Grid container spacing={4} justifyContent="center">
+              {pricingPlans.map((plan, index) => (
+                <Grid item xs={12} sm={6} md={4} key={index}>
+                  <Card sx={{ backgroundColor: '#E54792', color: 'white', borderRadius: 5, height: '100%' }}>
+                    <CardContent sx={{ textAlign: 'center' }}>
+                      <Typography variant="h5" gutterBottom sx={{ color: 'white', fontWeight: 'bold', fontSize: '2rem' }}>
+                        {plan.title}
+                      </Typography>
+                      <Typography variant="h6" gutterBottom sx={{ color: 'white', fontWeight: 'bold' }}>
+                        {plan.price}
+                      </Typography>
+                      <ul style={{ listStyleType: 'none', padding: 0 }}>
+                        {plan.features.map((feature, i) => (
+                          <li key={i} style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>{feature}</li>
+                        ))}
+                      </ul>
+                      <Button variant="contained" sx={{ mt: 2, backgroundColor: '#0F9ED5', color: 'white', fontWeight: 'bold' }}>
+                        Choose Plan
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+
+          {/* Footer Section */}
+          <Box sx={{ backgroundColor: '#0F9ED5', py: 3, mt: 8, width: '100%' }}>
+            <Typography
+              variant="body1"
+              sx={{
+                textAlign: 'center',
+                color: 'white',
+                fontWeight: 'bold',
+              }}
+            >
+              <Button onClick={scrollToTop} sx={{ color: 'white', textDecoration: 'none', margin: '0 1rem', fontWeight: 'bold' }}>MemorAIze</Button>
+              <a href="https://github.com/I2S9/MemorAIze" style={{ color: 'white', textDecoration: 'none', margin: '0 1rem' }}>GitHub</a>
+              <a href="https://llama.ai" style={{ color: 'white', textDecoration: 'none', margin: '0 1rem' }}>Llama</a>
+            </Typography>
           </Box>
 
         </Container>
