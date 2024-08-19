@@ -22,6 +22,10 @@ import {
   InputLabel,
   AppBar,
   Toolbar,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormLabel,
 } from "@mui/material";
 import { collection, writeBatch, setDoc, doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
@@ -29,6 +33,9 @@ import { useState } from "react";
 import { db } from "@/firebase";
 import Head from 'next/head';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import * as pdfjsLib from 'pdfjs-dist/webpack';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.js`;
 
 const theme = createTheme({
   typography: {
@@ -74,15 +81,23 @@ export default function Generate() {
   const [answerType, setAnswerType] = useState("True or False");
   const [difficulty, setDifficulty] = useState("Medium");
   const [lang, setLang] = useState("English");
+  const [inputType, setInputType] = useState("topic");
+  const [pdfFile, setPdfFile] = useState(null);
   const router = useRouter();
 
   const handleSubmit = async () => {
+    let inputData = text;
+
+    if (inputType === "pdf" && pdfFile) {
+      inputData = await convertPdfToText(pdfFile);
+    }
+
     fetch("/api/generate", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ data: text, lang, numFlashcards, difficulty, answerType }),
+      body: JSON.stringify({ data: inputData, lang, numFlashcards, difficulty, answerType }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -140,6 +155,32 @@ export default function Generate() {
     await batch.commit();
     handleClose();
     router.push(`/flashcards?id=${name}`);
+  };
+
+  const convertPdfToText = async (file) => {
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(file);
+
+    return new Promise((resolve, reject) => {
+      reader.onload = async () => {
+        const typedArray = new Uint8Array(reader.result);
+        const pdf = await pdfjsLib.getDocument(typedArray).promise;
+        let text = '';
+
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const content = await page.getTextContent();
+          const pageText = content.items.map(item => item.str).join(' ');
+          text += pageText + ' ';
+        }
+
+        resolve(text);
+      };
+
+      reader.onerror = (error) => {
+        reject(error);
+      };
+    });
   };
 
   return (
@@ -229,21 +270,50 @@ export default function Generate() {
                 flexDirection: 'column',
                 alignItems: 'center'
               }}>
-                <TextField
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                  label="Enter text"
-                  fullWidth
-                  multiline
-                  rows={4}
-                  variant="outlined"
-                  sx={{
-                    mb: 3, 
-                    backgroundColor: '#E5F4FB', 
-                    '& .MuiOutlinedInput-root': { borderRadius: 2 },
-                    '& .MuiInputLabel-root': { color: '#000' }
-                  }}
-                />
+                <FormControl component="fieldset" sx={{ mb: 3, border: '2px solid #E54792', borderRadius: 2, p: 2 }}>
+                <FormLabel component="legend" sx={{ color: '#000000', fontWeight: 'bold' }}>Input Type</FormLabel>
+                <RadioGroup
+                  row
+                  value={inputType}
+                  onChange={(e) => setInputType(e.target.value)}
+                  sx={{ '& .MuiFormControlLabel-label': { color: '#000000', fontWeight: 'bold' } }}
+                >
+                  <FormControlLabel value="topic" control={<Radio sx={{ color: '#E54792', '&.Mui-checked': { color: '#E54792' } }} />} label="Enter Topic" />
+                  <FormControlLabel value="pdf" control={<Radio sx={{ color: '#E54792', '&.Mui-checked': { color: '#E54792' } }} />} label="Upload PDF" />
+                </RadioGroup>
+              </FormControl>
+
+                {inputType === "topic" ? (
+                  <TextField
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    label="Enter text"
+                    fullWidth
+                    multiline
+                    rows={4}
+                    variant="outlined"
+                    sx={{
+                      mb: 3, 
+                      backgroundColor: '#E5F4FB', 
+                      '& .MuiOutlinedInput-root': { borderRadius: 2 },
+                      '& .MuiInputLabel-root': { color: '#000' }
+                    }}
+                  />
+                ) : (
+                  <TextField
+                    type="file"
+                    onChange={(e) => setPdfFile(e.target.files[0])}
+                    fullWidth
+                    variant="outlined"
+                    sx={{
+                      mb: 3, 
+                      backgroundColor: '#E5F4FB', 
+                      '& .MuiOutlinedInput-root': { borderRadius: 2 },
+                      '& .MuiInputLabel-root': { color: '#000' }
+                    }}
+                  />
+                )}
+
                 <FormControl fullWidth sx={{ mb: 3 }}> 
                   <InputLabel sx={{ color: '#000' }}>Language</InputLabel>
                   <Select
@@ -461,20 +531,27 @@ export default function Generate() {
                         margin="dense"
                         label="Collection Name"
                         fullWidth
+                        variant="outlined"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        variant="outlined"
-                        sx={{ borderRadius: 8 }}
+                        sx={{
+                          backgroundColor: '#E5F4FB', 
+                          '& .MuiOutlinedInput-root': { borderRadius: 2 },
+                          '& .MuiInputLabel-root': { color: '#000' }
+                        }}
                       />
                     </DialogContent>
                     <DialogActions>
-                      <Button onClick={handleClose} sx={{ textTransform: 'none' }}>Cancel</Button>
-                      <Button onClick={saveFlashcard} sx={{ textTransform: 'none' }}>Save</Button>
+                      <Button onClick={handleClose} color="primary">
+                        Cancel
+                      </Button>
+                      <Button onClick={saveFlashcard} color="primary">
+                        Save
+                      </Button>
                     </DialogActions>
                   </Dialog>
                 </Box>
               )}
-
             </Box>
           </Container>
         </Container>
@@ -482,3 +559,7 @@ export default function Generate() {
     </ThemeProvider>
   );
 }
+
+
+
+
