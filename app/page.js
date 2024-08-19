@@ -69,7 +69,7 @@ const pricingPlans = [
   {
     title: 'Basic',
     price: 'Free',
-    features: ['Limited Flashcards', 'Basic Analytics', 'Community Support'],
+    features: ['Limited Flashcards', 'Limited Users', 'Basic Analytics', 'Community Support'],
   },
   {
     title: 'Pro',
@@ -203,7 +203,7 @@ export default function Home() {
           </Box>
 
           <Box sx={{ my: 10, p: 4, backgroundColor: '#E5F4FB', borderRadius: 5, px: 4, boxShadow: 0 }}>
-            <Typography textAlign="center" variant="h4" gutterBottom sx={{ color: '#0F9ED5', mb: 6, textShadow: '2px 2px 4px rgba(0,0,0,0.3)', fontSize: '3rem', fontWeight: 'bold' }}>
+            <Typography textAlign="center" variant="h4" gutterBottom sx={{ color: '#0F9ED5', mb: 6, fontSize: '2.3rem', fontWeight: 'bold' }}>
               {Array.from("Features").map((letter, index) => (
                 <span key={index} className="hover-letter">{letter}</span>
               ))}
@@ -234,7 +234,7 @@ export default function Home() {
                         fontSize: '1.2rem', 
                         overflowWrap: 'break-word', 
                         padding: '0 10px', 
-                        fontWeight: 'bold', // Text in bold
+                        fontWeight: 'bold', 
                       }}
                     >
                       <Typography variant="body1" sx={{ mb: 1 }}>
@@ -273,7 +273,7 @@ export default function Home() {
 
           {/* Pricing Section */}
           <Box sx={{ my: 10, py: 6, backgroundColor: '#E5F4FB', borderRadius: 5, px: 4, boxShadow: 0 }}>
-            <Typography variant="h4" textAlign="center" gutterBottom sx={{ color: '#0F9ED5', mb: 6, textShadow: '2px 2px 4px rgba(0,0,0,0.3)', fontSize: '3rem', fontWeight: 'bold' }}>
+            <Typography variant="h4" textAlign="center" gutterBottom sx={{ color: '#0F9ED5', mb: 6, fontSize: '2.3rem', fontWeight: 'bold' }}>
               {Array.from("Pricing").map((letter, index) => (
                 <span key={index} className="hover-letter">{letter}</span>
               ))}
@@ -294,7 +294,7 @@ export default function Home() {
                           <li key={i} style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>{feature}</li>
                         ))}
                       </ul>
-                      <Button variant="contained" sx={{ mt: 2, backgroundColor: '#0F9ED5', color: 'white', fontWeight: 'bold' }}>
+                      <Button variant="contained" sx={{ mt: 2, backgroundColor: '#0F9ED5', color: 'white', fontWeight: 'bold', borderRadius: 5 }}>
                         Choose Plan
                       </Button>
                     </CardContent>
@@ -305,7 +305,7 @@ export default function Home() {
           </Box>
 
           {/* Footer Section */}
-          <Box sx={{ backgroundColor: '#0F9ED5', py: 3, mt: 8, width: '100%' }}>
+          <Box sx={{ backgroundColor: '#0F9ED5', py: 3, mt: 8, width: '100%', borderRadius: 10}}>
             <Typography
               variant="body1"
               sx={{
