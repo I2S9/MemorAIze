@@ -343,10 +343,9 @@ export default function Generate() {
                   </Button>
                 </Box>
               </Paper>
-
               {flashcards.length > 0 && (
                 <Box sx={{ mt: 4, width: "100%" }}>
-                  <Typography variant="h4" sx={{ mb: 2, color: '#0F9ED5', fontWeight: 'bold' }}>
+                  <Typography variant="h4" sx={{ mb: 2, color: '#0F9ED5', fontWeight: 'bold', fontSize: '2rem' }}> {/* Réduction de la taille de la police */}
                     Flashcards Preview
                   </Typography>
                   <Grid container spacing={2}>
@@ -360,6 +359,7 @@ export default function Generate() {
                             transition: "transform 0.6s",
                             boxShadow: 3,
                             borderRadius: 8,
+                            backgroundColor: '#E5F4FB', 
                           }}
                         >
                           <CardActionArea>
@@ -393,7 +393,7 @@ export default function Generate() {
                                 <Typography
                                   variant="h6"
                                   sx={{
-                                    fontSize: { xs: '1rem', sm: '1.5rem', md: '2rem' },
+                                    fontSize: { xs: '0.8rem', sm: '1.2rem', md: '1rem' }, 
                                     lineHeight: 1.2,
                                   }}
                                 >
@@ -421,7 +421,7 @@ export default function Generate() {
                                 <Typography
                                   variant="h6"
                                   sx={{
-                                    fontSize: { xs: '1rem', sm: '1.5rem', md: '2rem' },
+                                    fontSize: { xs: '0.8rem', sm: '1.2rem', md: '1rem' }, 
                                     lineHeight: 1.2,
                                   }}
                                 >
@@ -474,6 +474,7 @@ export default function Generate() {
                   </Dialog>
                 </Box>
               )}
+
             </Box>
           </Container>
         </Container>
@@ -481,4 +482,3 @@ export default function Generate() {
     </ThemeProvider>
   );
 }
-
