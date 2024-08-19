@@ -327,7 +327,7 @@ export default function Home() {
             >
               <a href="https://memoraize.vercel.app/" style={{ color: 'white', textDecoration: 'none', margin: '0 1rem' }}>MemorAIze</a>
               <a href="https://github.com/I2S9/MemorAIze" style={{ color: 'white', textDecoration: 'none', margin: '0 1rem' }}>GitHub</a>
-              <a href="https://llama.ai" style={{ color: 'white', textDecoration: 'none', margin: '0 1rem' }}>Powered by Llama</a>
+              <a href="https://www.llamaindex.ai/" style={{ color: 'white', textDecoration: 'none', margin: '0 1rem' }}>Powered by Llama</a>
             </Typography>
           </Box>
 
