@@ -6,6 +6,7 @@ import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { Container, Grid, Box, Typography, Card, CardActionArea, CardContent, AppBar, Toolbar, Button, TextField } from '@mui/material';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { CirclePicker } from 'react-color';
 
 export default function Flashcards() {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -14,6 +15,8 @@ export default function Flashcards() {
   const [flipped, setFlipped] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState('name');
+  const [frontColor, setFrontColor] = useState('#0F9ED5'); 
+  const [backColor, setBackColor] = useState('#E54792'); 
   const searchParams = useSearchParams();
   const search = searchParams.get('id');
   const router = useRouter();
@@ -56,7 +59,9 @@ export default function Flashcards() {
         if (sortOrder === 'date') {
           return a.date - b.date; 
         } else if (sortOrder === 'thematic') {
-          return a.thematic.localeCompare(b.thematic);
+          const thematicA = a.thematic || '';
+          const thematicB = b.thematic || '';
+          return thematicA.localeCompare(thematicB);
         } else {
           return a.front.localeCompare(b.front);
         }
@@ -78,6 +83,14 @@ export default function Flashcards() {
     }));
   };
 
+  const handleFrontColorChange = (color) => {
+    setFrontColor(color.hex);
+  };
+
+  const handleBackColorChange = (color) => {
+    setBackColor(color.hex);
+  };
+
   if (!isLoaded) {
     return <></>;
   }
@@ -86,7 +99,6 @@ export default function Flashcards() {
     <Container maxWidth="100vw" sx={{ backgroundColor: '#E5F4FB', minHeight: '100vh' }}>
       <AppBar position="static" color="transparent" elevation={0}>
         <Toolbar>
-          {/* MM Button at the top */}
           <Button
             onClick={() => router.push('/')}
             sx={{
@@ -191,6 +203,16 @@ export default function Flashcards() {
                 InputProps={{ style: { borderRadius: 2, padding: '10px' } }}
               />
             </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 4 }}>
+              <Box>
+                <Typography variant="h6" sx={{ color: '#0F9ED5', mb: 2 }}>Question Card Color</Typography>
+                <CirclePicker color={frontColor} onChangeComplete={handleFrontColorChange} />
+              </Box>
+              <Box>
+                <Typography variant="h6" sx={{ color: '#E54792', mb: 2 }}>Answer Card Color</Typography>
+                <CirclePicker color={backColor} onChangeComplete={handleBackColorChange} />
+              </Box>
+            </Box>
             <Grid container spacing={3} sx={{ mt: 4 }}>
               {flashcards.map((flashcard, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
@@ -223,11 +245,11 @@ export default function Flashcards() {
                               boxSizing: 'border-box',
                             },
                             '& > div > div:nth-of-type(1)': {
-                              backgroundColor: '#0F9ED5',
+                              backgroundColor: frontColor,
                               color: 'white',
                             },
                             '& > div > div:nth-of-type(2)': {
-                              backgroundColor: '#E54792',
+                              backgroundColor: backColor,
                               color: 'white',
                               transform: 'rotateY(180deg)',
                             },
@@ -258,3 +280,4 @@ export default function Flashcards() {
     </Container>
   );
 }
+
