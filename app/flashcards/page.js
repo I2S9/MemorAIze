@@ -1,12 +1,14 @@
 'use client';
 
 import { useUser } from '@clerk/nextjs';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, MouseEvent } from 'react';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase';
-import { Container, Grid, Box, Typography, Card, CardActionArea, CardContent, AppBar, Toolbar, Button, TextField } from '@mui/material';
+import { Container, Grid, Box, Typography, Card, CardActionArea, CardContent, AppBar, Toolbar, Button, TextField, IconButton, Menu, MenuItem } from '@mui/material';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { CirclePicker } from 'react-color';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 export default function Flashcards() {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -17,6 +19,8 @@ export default function Flashcards() {
   const [sortOrder, setSortOrder] = useState('name');
   const [frontColor, setFrontColor] = useState('#0F9ED5'); 
   const [backColor, setBackColor] = useState('#E54792'); 
+  const [anchorElSort, setAnchorElSort] = useState(null);
+  const [anchorElColor, setAnchorElColor] = useState(null);
   const searchParams = useSearchParams();
   const search = searchParams.get('id');
   const router = useRouter();
@@ -89,6 +93,27 @@ export default function Flashcards() {
 
   const handleBackColorChange = (color) => {
     setBackColor(color.hex);
+  };
+
+  const handleSortClick = (event) => {
+    setAnchorElSort(event.currentTarget);
+  };
+
+  const handleCloseSort = () => {
+    setAnchorElSort(null);
+  };
+
+  const handleColorClick = (event) => {
+    setAnchorElColor(event.currentTarget);
+  };
+
+  const handleCloseColor = () => {
+    setAnchorElColor(null);
+  };
+
+  const handleSortOptionClick = (option) => {
+    setSortOrder(option);
+    handleCloseSort();
   };
 
   if (!isLoaded) {
@@ -175,44 +200,58 @@ export default function Flashcards() {
           </>
         ) : (
           <Box sx={{ width: '100%', mb: 6 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-              <Button
-                onClick={() => setSortOrder('name')}
-                sx={{ backgroundColor: '#0F9ED5', color: 'white', borderRadius: 2, marginRight: 1 }}
-              >
-                Sort by Name
-              </Button>
-              <Button
-                onClick={() => setSortOrder('date')}
-                sx={{ backgroundColor: '#0F9ED5', color: 'white', borderRadius: 2, marginRight: 1 }}
-              >
-                Sort by Date
-              </Button>
-              <Button
-                onClick={() => setSortOrder('thematic')}
-                sx={{ backgroundColor: '#0F9ED5', color: 'white', borderRadius: 2, marginRight: 1 }}
-              >
-                Sort by Thematic
-              </Button>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
               <TextField
                 variant="outlined"
                 placeholder="Search flashcards..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 }, backgroundColor: '#0F9ED5', '& input': { color: 'white' } }}
-                InputProps={{ style: { borderRadius: 2, padding: '10px' } }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                    border: 'none',
+                    backgroundColor: '#E5F4FB',
+                  },
+                  '& .MuiInputBase-input': {
+                    padding: '10px',
+                  },
+                  flexGrow: 1,
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <IconButton onClick={handleSortClick}>
+                        <ArrowDropDownIcon sx={{ color: '#0F9ED5' }} />
+                      </IconButton>
+                      <IconButton onClick={handleColorClick}>
+                        <MoreVertIcon sx={{ color: '#0F9ED5' }} />
+                      </IconButton>
+                    </Box>
+                  ),
+                }}
               />
             </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 4 }}>
-              <Box>
-                <Typography variant="h6" sx={{ color: '#0F9ED5', mb: 2 }}>Question Card Color</Typography>
-                <CirclePicker color={frontColor} onChangeComplete={handleFrontColorChange} />
-              </Box>
-              <Box>
-                <Typography variant="h6" sx={{ color: '#E54792', mb: 2 }}>Answer Card Color</Typography>
-                <CirclePicker color={backColor} onChangeComplete={handleBackColorChange} />
-              </Box>
-            </Box>
+            <Menu
+              anchorEl={anchorElSort}
+              open={Boolean(anchorElSort)}
+              onClose={handleCloseSort}
+              PaperProps={{ sx: { width: 200 } }}
+            >
+              <MenuItem onClick={() => handleSortOptionClick('name')}>Sort by Name</MenuItem>
+              <MenuItem onClick={() => handleSortOptionClick('date')}>Sort by Date</MenuItem>
+              <MenuItem onClick={() => handleSortOptionClick('thematic')}>Sort by Thematic</MenuItem>
+            </Menu>
+            <Menu
+              anchorEl={anchorElColor}
+              open={Boolean(anchorElColor)}
+              onClose={handleCloseColor}
+              PaperProps={{ sx: { width: 300, padding: 2 } }}
+            >
+              <Typography variant="h6" sx={{ color: '#0F9ED5', mb: 2 }}>Question Card Color</Typography>
+              <CirclePicker color={frontColor} onChangeComplete={handleFrontColorChange} />
+              <Typography variant="h6" sx={{ color: '#E54792', mt: 2, mb: 2 }}>Answer Card Color</Typography>
+              <CirclePicker color={backColor} onChangeComplete={handleBackColorChange} />
+            </Menu>
             <Grid container spacing={3} sx={{ mt: 4 }}>
               {flashcards.map((flashcard, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
@@ -280,4 +319,3 @@ export default function Flashcards() {
     </Container>
   );
 }
-
