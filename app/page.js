@@ -202,7 +202,7 @@ export default function Home() {
             </Button>
           </Box>
 
-          <Box sx={{ my: 10, p: 4, backgroundColor: '#E5F4FB', borderRadius: 5, px: 4, boxShadow: 3 }}>
+          <Box sx={{ my: 10, p: 4, backgroundColor: '#E5F4FB', borderRadius: 5, px: 4, boxShadow: 0 }}>
             <Typography textAlign="center" variant="h4" gutterBottom sx={{ color: '#0F9ED5', mb: 6, textShadow: '2px 2px 4px rgba(0,0,0,0.3)', fontSize: '3rem', fontWeight: 'bold' }}>
               {Array.from("Features").map((letter, index) => (
                 <span key={index} className="hover-letter">{letter}</span>
@@ -272,7 +272,7 @@ export default function Home() {
           </Box>
 
           {/* Pricing Section */}
-          <Box sx={{ my: 10, py: 6, backgroundColor: '#E5F4FB', borderRadius: 5, px: 4, boxShadow: 3 }}>
+          <Box sx={{ my: 10, py: 6, backgroundColor: '#E5F4FB', borderRadius: 5, px: 4, boxShadow: 0 }}>
             <Typography variant="h4" textAlign="center" gutterBottom sx={{ color: '#0F9ED5', mb: 6, textShadow: '2px 2px 4px rgba(0,0,0,0.3)', fontSize: '3rem', fontWeight: 'bold' }}>
               {Array.from("Pricing").map((letter, index) => (
                 <span key={index} className="hover-letter">{letter}</span>
