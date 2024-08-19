@@ -2,7 +2,7 @@
 
 ![alt text](memoraize-1.png)
 
-**MemorAIze** is a cutting-edge flashcard SaaS designed to enhance learning and memory retention through AI-powered features. Built with Next.js, Clerk, Firebase, OpenAI, and Stripe, MemorAIze offers users a smart and efficient way to create, manage, and learn from flashcards.
+**MemorAIze** is a cutting-edge flashcard SaaS designed to enhance learning and memory retention through AI-powered features. Built with Next.js, Clerk, Firebase, Llama 3.1, and Stripe, MemorAIze offers users a smart and efficient way to create, manage, and learn from flashcards.
 
 ## What it does 🚀
 
@@ -16,7 +16,7 @@
 
 - **Frontend**: Developed with Next.js for a modern, fast, and responsive user interface.
 - **Backend**: Utilizes Firebase for real-time data synchronization and authentication.
-- **AI Integration**: Powered by OpenAI's GPT-3 for intelligent content generation and adaptive learning features.
+- **AI Integration**: Powered by Llama 3.1 for intelligent content generation and adaptive learning features.
 - **Payment Integration**: Stripe is used for secure subscription management and payment processing.
 - **User Authentication**: Clerk provides secure and streamlined user authentication and management.
 
@@ -28,15 +28,15 @@ To get started with MemorAIze, clone the repository and install the required dep
 git clone git@github.com:I2S9/MemorAIze.git
 cd MemorAIze
 npm install
-npm install framer-motion clsx tailwind-merge
+npm run dev
 ```
 
-Configure the Llama API key.
+Configure the Llama API key in the `.env` file.
 
 ## Features 🌟
 
 - **Intelligent Flashcard Creation**: Generate flashcards with the help of AI based on user-defined criteria.
 - **Adaptive Learning Paths**: Automatically adjust flashcard difficulty based on user performance.
 - **Multilingual Capabilities**: Create and review flashcards in multiple languages.
-- **Customizable Formats**: Choose from various flashcard formats, including text, images, and audio.
-- **Performance Insights**: Track learning progress with detailed analytics and reports.
+- **Customizable Formats**: Choose from various flashcard formats, including text, images, and audio (upcoming soon!)
+- **Flashcards Sorting**: Sort your flashcards by name, date or thematic.
