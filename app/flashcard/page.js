@@ -83,18 +83,13 @@ export default function Flashcards() {
   }
 
   return (
-    <Container maxWidth="100vw" sx={{ backgroundColor: '#E5F4FB', minHeight: '100vh' }}>
+    <Container maxWidth="lg" sx={{ backgroundColor: '#F0F4F8', minHeight: '100vh', padding: '2rem' }}>
       <AppBar position="static" color="transparent" elevation={0}>
-        <Toolbar>
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           {/* MM Button at the top */}
           <Button
             onClick={() => router.push('/')}
             sx={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              mt: 2,
-              ml: 2,
               padding: 0,
               minWidth: 'auto',
               height: 'auto',
@@ -120,24 +115,70 @@ export default function Flashcards() {
             }}
           />
           <Box sx={{ flexGrow: 1 }} />
-          {!isSignedIn && (
+          {!isSignedIn ? (
             <>
-              <Button onClick={() => router.push('/sign-in')} color="primary" variant="contained" sx={{ color: 'white', fontWeight: 'bold', borderRadius: 5 }}>
+              <Button
+                onClick={() => router.push('/sign-in')}
+                color="primary"
+                variant="contained"
+                sx={{
+                  color: 'white',
+                  fontWeight: 'bold',
+                  borderRadius: 20,
+                  backgroundColor: '#E54792',
+                  '&:hover': {
+                    backgroundColor: '#C43C60',
+                  },
+                  mx: 1
+                }}
+              >
                 Log In
               </Button>
-              <Button onClick={() => router.push('/sign-up')} color="primary" variant="contained" sx={{ color: 'white', fontWeight: 'bold', borderRadius: 5, ml: 2 }}>
+              <Button
+                onClick={() => router.push('/sign-up')}
+                color="primary"
+                variant="contained"
+                sx={{
+                  color: 'white',
+                  fontWeight: 'bold',
+                  borderRadius: 20,
+                  backgroundColor: '#0F9ED5',
+                  '&:hover': {
+                    backgroundColor: '#0A8FD5',
+                  },
+                  mx: 1
+                }}
+              >
                 Sign Up
               </Button>
             </>
+          ) : (
+            <Button
+              onClick={() => { /* Handle Logout */ }}
+              sx={{
+                color: '#E54792',
+                fontWeight: 'bold',
+                borderRadius: 20,
+                backgroundColor: 'white',
+                border: '2px solid #E54792',
+                '&:hover': {
+                  backgroundColor: '#E54792',
+                  color: 'white',
+                },
+                mx: 1
+              }}
+            >
+              Log Out
+            </Button>
           )}
         </Toolbar>
       </AppBar>
 
-      <Box sx={{ mt: 4, mb: 6, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Box sx={{ mt: 4 }}>
         {!search ? (
           <>
-            <Typography variant="h4" sx={{ color: '#E54792', fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0,0,0,0.3)', mb: 4 }}>
-              Your Flashcard Collections
+            <Typography variant="h4" sx={{ color: '#E54792', fontWeight: 'bold', mb: 4, textAlign: 'center' }}>
+              Your Flashcard Collections 
             </Typography>
             {collections.length === 0 ? (
               <Typography variant="h6" sx={{ color: '#E54792', textAlign: 'center', mt: 4, fontWeight: 'bold' }}>
@@ -147,10 +188,10 @@ export default function Flashcards() {
               <Grid container spacing={3} sx={{ mt: 4 }}>
                 {collections.map((collection, index) => (
                   <Grid item xs={12} sm={6} md={4} key={index}>
-                    <Card sx={{ boxShadow: 3 }}>
+                    <Card sx={{ boxShadow: 3, borderRadius: 2 }}>
                       <CardActionArea onClick={() => handleCollectionClick(collection.name)}>
                         <CardContent>
-                          <Typography variant="h5" component="div">
+                          <Typography variant="h5" component="div" sx={{ textAlign: 'center', color: '#0F9ED5' }}>
                             {collection.name}
                           </Typography>
                         </CardContent>
@@ -166,19 +207,19 @@ export default function Flashcards() {
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
               <Button
                 onClick={() => setSortOrder('name')}
-                sx={{ backgroundColor: '#0F9ED5', color: 'white', borderRadius: 2, marginRight: 1 }}
+                sx={{ backgroundColor: '#0F9ED5', color: 'white', borderRadius: 20, mx: 1 }}
               >
                 Sort by Name
               </Button>
               <Button
                 onClick={() => setSortOrder('date')}
-                sx={{ backgroundColor: '#0F9ED5', color: 'white', borderRadius: 2, marginRight: 1 }}
+                sx={{ backgroundColor: '#0F9ED5', color: 'white', borderRadius: 20, mx: 1 }}
               >
                 Sort by Date
               </Button>
               <Button
                 onClick={() => setSortOrder('thematic')}
-                sx={{ backgroundColor: '#0F9ED5', color: 'white', borderRadius: 2, marginRight: 1 }}
+                sx={{ backgroundColor: '#0F9ED5', color: 'white', borderRadius: 20, mx: 1 }}
               >
                 Sort by Thematic
               </Button>
@@ -187,14 +228,14 @@ export default function Flashcards() {
                 placeholder="Search flashcards..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 }, backgroundColor: '#0F9ED5', '& input': { color: 'white' } }}
-                InputProps={{ style: { borderRadius: 2, padding: '10px' } }}
+                sx={{ '& .MuiOutlinedInput-root': { borderRadius: 20 }, backgroundColor: '#0F9ED5', '& input': { color: 'white' }, mx: 1 }}
+                InputProps={{ style: { borderRadius: 20, padding: '10px' } }}
               />
             </Box>
             <Grid container spacing={3} sx={{ mt: 4 }}>
               {flashcards.map((flashcard, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
-                  <Card sx={{ boxShadow: 3 }}>
+                  <Card sx={{ boxShadow: 3, borderRadius: 2 }}>
                     <CardActionArea onClick={() => handleCardClick(index)}>
                       <CardContent>
                         <Box
@@ -206,7 +247,8 @@ export default function Flashcards() {
                               position: 'relative',
                               width: '100%',
                               height: '200px',
-                              boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
+                              boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                              borderRadius: 2,
                               transform: flipped[index]
                                 ? 'rotateY(180deg)'
                                 : 'rotateY(0deg)',
@@ -221,6 +263,7 @@ export default function Flashcards() {
                               alignItems: 'center',
                               padding: 2,
                               boxSizing: 'border-box',
+                              borderRadius: 2,
                             },
                             '& > div > div:nth-of-type(1)': {
                               backgroundColor: '#0F9ED5',
