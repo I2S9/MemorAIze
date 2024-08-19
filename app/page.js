@@ -202,7 +202,12 @@ export default function Home() {
             </Button>
           </Box>
 
-          <Box sx={{ my: 10, p: 4, backgroundColor: '#E5F4FB', borderRadius: 5, px: 4, boxShadow: 0 }}>
+        {/* Image Section */}
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', my: 10 }}>
+          <img src="/generate.png" alt="Generate" style={{ maxWidth: '100%', height: 'auto', borderRadius: '10px' }} />
+        </Box>
+
+          <Box sx={{ my: 10, p: 1, backgroundColor: '#E5F4FB', borderRadius: 5, px: 4, boxShadow: 0 }}>
             <Typography textAlign="center" variant="h4" gutterBottom sx={{ color: '#0F9ED5', mb: 6, fontSize: '2.3rem', fontWeight: 'bold' }}>
               {Array.from("Features").map((letter, index) => (
                 <span key={index} className="hover-letter">{letter}</span>
@@ -274,8 +279,7 @@ export default function Home() {
           {/* Citation */}
           <Box sx={{ my: 10, px: 4, textAlign: 'center' }}>
             <Typography variant="h6" sx={{ color: '#E54792', fontSize: '2rem', fontWeight: 'bold', maxWidth: '800px', margin: '0 auto' }}>
-              The best way to predict the future is to invent it. Empower your learning journey with our innovative flashcard solutions and make knowledge yours.
-            </Typography>
+              The best way to predict the future is to invent it. Empower your learning journey with our innovative flashcard solutions and make knowledge yours.            </Typography>
           </Box>
 
           {/* Pricing Section */}
