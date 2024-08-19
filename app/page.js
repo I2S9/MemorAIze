@@ -271,6 +271,13 @@ export default function Home() {
             </Grid>
           </Box>
 
+          {/* Citation */}
+          <Box sx={{ my: 10, px: 4, textAlign: 'center' }}>
+            <Typography variant="h6" sx={{ color: '#E54792', fontSize: '2rem', fontWeight: 'bold', maxWidth: '800px', margin: '0 auto' }}>
+              The best way to predict the future is to invent it. Empower your learning journey with our innovative flashcard solutions and make knowledge yours.
+            </Typography>
+          </Box>
+
           {/* Pricing Section */}
           <Box sx={{ my: 10, py: 6, backgroundColor: '#E5F4FB', borderRadius: 5, px: 4, boxShadow: 0 }}>
             <Typography variant="h4" textAlign="center" gutterBottom sx={{ color: '#0F9ED5', mb: 6, fontSize: '2.3rem', fontWeight: 'bold' }}>
@@ -314,9 +321,9 @@ export default function Home() {
                 fontWeight: 'bold',
               }}
             >
-              <Button onClick={scrollToTop} sx={{ color: 'white', textDecoration: 'none', margin: '0 1rem', fontWeight: 'bold' }}>MemorAIze</Button>
+              <a href="https://github.com/I2S9/MemorAIze" style={{ color: 'white', textDecoration: 'none', margin: '0 1rem' }}>MemorAIze</a>
               <a href="https://github.com/I2S9/MemorAIze" style={{ color: 'white', textDecoration: 'none', margin: '0 1rem' }}>GitHub</a>
-              <a href="https://llama.ai" style={{ color: 'white', textDecoration: 'none', margin: '0 1rem' }}>Llama</a>
+              <a href="https://llama.ai" style={{ color: 'white', textDecoration: 'none', margin: '0 1rem' }}>Powered by Llama</a>
             </Typography>
           </Box>
 
