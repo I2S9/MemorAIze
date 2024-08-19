@@ -10,10 +10,9 @@ const theme = createTheme({
   typography: {
     fontFamily: 'Aptos Black, sans-serif',
     h4: {
-      fontSize: '3rem',
+      fontSize: '2.5rem',
       fontWeight: 'bold',
       color: '#E54792',
-      textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
     },
   },
   palette: {
