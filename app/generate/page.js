@@ -269,6 +269,7 @@ export default function Generate() {
                     <MenuItem value="Portuguese">Portuguese</MenuItem>
                     <MenuItem value="Russian">Russian</MenuItem>
                     <MenuItem value="Spanish">Spanish</MenuItem>
+                    <MenuItem value="Vietnamese">Vietnamese</MenuItem>
                   </Select>
                 </FormControl>
                 <Grid container spacing={3} sx={{ mb: 3 }}>
@@ -303,6 +304,7 @@ export default function Generate() {
                         <MenuItem value="True or False">True or False</MenuItem>
                         <MenuItem value="Multiple Choice">Multiple Choice</MenuItem>
                         <MenuItem value="Short Answer">Short Answer</MenuItem>
+                        <MenuItem value="One Word Answer">One Word Answer</MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
@@ -353,7 +355,7 @@ export default function Generate() {
                         <Card
                           onClick={() => handleCardClick(index)}
                           sx={{
-                            transform: flipped[index] ? "rotateY(180deg)" : "rotateY(0deg)",
+                            perspective: "1000px",
                             transformStyle: "preserve-3d",
                             transition: "transform 0.6s",
                             boxShadow: 3,
@@ -361,22 +363,72 @@ export default function Generate() {
                           }}
                         >
                           <CardActionArea>
-                            <CardContent
+                            <Box
                               sx={{
-                                height: 200,
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                backgroundColor: flipped[index] ? "#E54792" : "#0F9ED5",
-                                color: "white",
-                                borderRadius: 8,
-                                backfaceVisibility: "hidden",
+                                position: "relative",
+                                width: "100%",
+                                height: "200px",
+                                transform: flipped[index] ? "rotateY(180deg)" : "rotateY(0deg)",
+                                transformStyle: "preserve-3d",
+                                transition: "transform 0.6s",
                               }}
                             >
-                              <Typography variant="h5">
-                                {flipped[index] ? flashcard.answer : flashcard.question}
-                              </Typography>
-                            </CardContent>
+                              <CardContent
+                                sx={{
+                                  position: "absolute",
+                                  width: "100%",
+                                  height: "100%",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  backgroundColor: "#0F9ED5",
+                                  color: "white",
+                                  borderRadius: 8,
+                                  backfaceVisibility: "hidden",
+                                  textAlign: "center",
+                                  overflowWrap: "break-word",
+                                  padding: 2,
+                                }}
+                              >
+                                <Typography
+                                  variant="h6"
+                                  sx={{
+                                    fontSize: { xs: '1rem', sm: '1.5rem', md: '2rem' },
+                                    lineHeight: 1.2,
+                                  }}
+                                >
+                                  {flashcard.front}
+                                </Typography>
+                              </CardContent>
+                              <CardContent
+                                sx={{
+                                  position: "absolute",
+                                  width: "100%",
+                                  height: "100%",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  backgroundColor: "#E54792",
+                                  color: "white",
+                                  borderRadius: 8,
+                                  backfaceVisibility: "hidden",
+                                  textAlign: "center",
+                                  overflowWrap: "break-word",
+                                  padding: 2,
+                                  transform: "rotateY(180deg)",
+                                }}
+                              >
+                                <Typography
+                                  variant="h6"
+                                  sx={{
+                                    fontSize: { xs: '1rem', sm: '1.5rem', md: '2rem' },
+                                    lineHeight: 1.2,
+                                  }}
+                                >
+                                  {flashcard.back}
+                                </Typography>
+                              </CardContent>
+                            </Box>
                           </CardActionArea>
                         </Card>
                       </Grid>
@@ -429,3 +481,4 @@ export default function Generate() {
     </ThemeProvider>
   );
 }
+
