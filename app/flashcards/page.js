@@ -186,8 +186,8 @@ export default function Flashcards() {
       <Box sx={{ mt: 4, mb: 6, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         {!search ? (
           <>
-            <Typography variant="h4" sx={{ color: '#E54792', fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0,0,0,0.3)', mb: 4 }}>
-              Your Flashcard Collections
+            <Typography variant="h4" sx={{ color: '#E54792', fontWeight: 'bold', mb: 4 }}>
+              Your Flashcards Collection
             </Typography>
             {collections.length === 0 ? (
               <Typography variant="h6" sx={{ color: '#E54792', textAlign: 'center', mt: 4, fontWeight: 'bold' }}>
