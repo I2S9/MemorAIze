@@ -1,7 +1,6 @@
 'use client';
-
 import { useUser } from '@clerk/nextjs';
-import { useEffect, useState, MouseEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { Container, Grid, Box, Typography, Card, CardActionArea, CardContent, AppBar, Toolbar, Button, TextField, IconButton, Menu, MenuItem } from '@mui/material';
@@ -9,6 +8,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { CirclePicker } from 'react-color';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export default function Flashcards() {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -17,8 +17,8 @@ export default function Flashcards() {
   const [flipped, setFlipped] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState('name');
-  const [frontColor, setFrontColor] = useState('#0F9ED5'); 
-  const [backColor, setBackColor] = useState('#E54792'); 
+  const [frontColor, setFrontColor] = useState('#0F9ED5');
+  const [backColor, setBackColor] = useState('#E54792');
   const [anchorElSort, setAnchorElSort] = useState(null);
   const [anchorElColor, setAnchorElColor] = useState(null);
   const searchParams = useSearchParams();
@@ -61,7 +61,7 @@ export default function Flashcards() {
 
       filteredFlashcards.sort((a, b) => {
         if (sortOrder === 'date') {
-          return a.date - b.date; 
+          return a.date - b.date;
         } else if (sortOrder === 'thematic') {
           const thematicA = a.thematic || '';
           const thematicB = b.thematic || '';
@@ -157,15 +157,27 @@ export default function Flashcards() {
             }}
           />
           <Box sx={{ flexGrow: 1 }} />
-          {!isSignedIn && (
+          <Button onClick={() => router.push('/flashcards')} color="primary" variant="text" sx={{ color: '#0F9ED5', fontWeight: 'bold' }}>
+            Your Flashcards
+          </Button>
+          {isSignedIn && (
+            <IconButton onClick={() => router.push('/profile')}>
+              <AccountCircleIcon sx={{ color: '#0F9ED5' }} />
+            </IconButton>
+          )}
+          {!isSignedIn ? (
             <>
-              <Button onClick={() => router.push('/sign-in')} color="primary" variant="contained" sx={{ color: 'white', fontWeight: 'bold', borderRadius: 5 }}>
+              <Button onClick={() => router.push('/sign-in')} color="primary" variant="contained" sx={{ color: 'white', fontWeight: 'bold', borderRadius: 5, ml: 2 }}>
                 Log In
               </Button>
               <Button onClick={() => router.push('/sign-up')} color="primary" variant="contained" sx={{ color: 'white', fontWeight: 'bold', borderRadius: 5, ml: 2 }}>
                 Sign Up
               </Button>
             </>
+          ) : (
+            <Button onClick={() => { /* Log out logic */ }} color="primary" variant="contained" sx={{ color: 'white', fontWeight: 'bold', borderRadius: 5, ml: 2 }}>
+              Log Out
+            </Button>
           )}
         </Toolbar>
       </AppBar>
