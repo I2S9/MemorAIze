@@ -6,8 +6,8 @@ const openai = new OpenAI({
   apiKey: process.env.OPENROUTER_API_KEY,
 });
 
-const systemPrompt = 
-`You are a flashcard creator. Your task is to generate concise and effective flashcards based on the given topic or content. Follow these guidelines:
+const systemPrompt = `
+You are a flashcard creator. Your task is to generate concise and effective flashcards based on the given topic or content. Follow these guidelines:
 
 1. Create clear and concise questions for the front of flashcard.
 2. Provide accurate and informative answers for the back of the flashcard.
@@ -96,6 +96,28 @@ export async function POST(req) {
     return NextResponse.json({ error: 'Error in generating flashcards' }, { status: 500 });
   }
 }
+
+export async function GET(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const topics = searchParams.get('topics');
+
+    const completion = await openai.chat.completions.create({
+      model: "meta-llama/llama-3.1-8b-instruct:free",
+      messages: [
+        { role: 'system', content: "You are a recommendation engine. Suggest a topic based on the given topics. You should answer in 1-3 words and nothing else. Answer in 1-3 words." },
+        { role: 'user', content: topics },
+      ],
+    });
+
+    const content = completion.choices[0].message.content.trim();
+    return NextResponse.json({ recommendedTopic: content });
+  } catch (error) {
+    console.error('Error in recommending topic:', error);
+    return NextResponse.json({ error: 'Error in recommending topic' }, { status: 500 });
+  }
+}
+
 
 
 
