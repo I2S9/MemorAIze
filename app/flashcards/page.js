@@ -4,12 +4,13 @@ import { useUser } from '@clerk/nextjs';
 import { useEffect, useState } from 'react';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase';
-import { Container, Grid, Box, Typography, Card, CardActionArea, CardContent, AppBar, Toolbar, Button, TextField, IconButton, Menu, MenuItem } from '@mui/material';
+import { Container, Grid, Box, Typography, Card, CardActionArea, CardContent, AppBar, Toolbar, Button, TextField, IconButton, Menu, MenuItem, Switch, FormControlLabel } from '@mui/material';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { CirclePicker } from 'react-color';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 
 export default function Flashcards() {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -22,6 +23,7 @@ export default function Flashcards() {
   const [backColor, setBackColor] = useState('#E54792');
   const [anchorElSort, setAnchorElSort] = useState(null);
   const [anchorElColor, setAnchorElColor] = useState(null);
+  const [audioMode, setAudioMode] = useState(false);
   const searchParams = useSearchParams();
   const search = searchParams.get('id');
   const router = useRouter();
@@ -115,6 +117,16 @@ export default function Flashcards() {
   const handleSortOptionClick = (option) => {
     setSortOrder(option);
     handleCloseSort();
+  };
+
+  const handleAudioToggle = () => {
+    setAudioMode(!audioMode);
+  };
+
+  const handleAudioPlay = (text, event) => {
+    event.stopPropagation(); 
+    const utterance = new SpeechSynthesisUtterance(text);
+    speechSynthesis.speak(utterance);
   };
 
   if (!isLoaded) {
@@ -264,6 +276,11 @@ export default function Flashcards() {
               <CirclePicker color={frontColor} onChangeComplete={handleFrontColorChange} />
               <Typography variant="h6" sx={{ color: '#000', mt: 2, mb: 2 }}>Answer Card Color</Typography>
               <CirclePicker color={backColor} onChangeComplete={handleBackColorChange} />
+              <Typography variant="h6" sx={{ color: '#000', mt: 2, mb: 2 }}>Audio Mode</Typography>
+              <FormControlLabel
+                control={<Switch checked={audioMode} onChange={handleAudioToggle} />}
+                label="Toggle Audio"
+              />
             </Menu>
             <Grid container spacing={3} sx={{ mt: 4 }}>
               {flashcards.map((flashcard, index) => (
@@ -312,11 +329,27 @@ export default function Flashcards() {
                               <Typography variant="h5" component="div">
                                 {flashcard.front}
                               </Typography>
+                              {audioMode && (
+                                <IconButton
+                                  sx={{ position: 'absolute', bottom: 8, right: 8 }}
+                                  onClick={(event) => handleAudioPlay(flashcard.front, event)}
+                                >
+                                  <VolumeUpIcon sx={{ color: 'white' }} />
+                                </IconButton>
+                              )}
                             </div>
                             <div>
                               <Typography variant="h5" component="div">
                                 {flashcard.back}
                               </Typography>
+                              {audioMode && (
+                                <IconButton
+                                  sx={{ position: 'absolute', bottom: 8, right: 8 }}
+                                  onClick={(event) => handleAudioPlay(flashcard.back, event)}
+                                >
+                                  <VolumeUpIcon sx={{ color: 'white' }} />
+                                </IconButton>
+                              )}
                             </div>
                           </div>
                         </Box>
@@ -332,3 +365,6 @@ export default function Flashcards() {
     </Container>
   );
 }
+
+
+
