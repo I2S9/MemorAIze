@@ -29,7 +29,7 @@ import {
 } from "@mui/material";
 import { collection, writeBatch, setDoc, doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { db } from "@/firebase";
 import Head from 'next/head';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -83,7 +83,31 @@ export default function Generate() {
   const [lang, setLang] = useState("English");
   const [inputType, setInputType] = useState("topic");
   const [pdfFile, setPdfFile] = useState(null);
+  const [recommendedTopic, setRecommendedTopic] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      fetchRecommendedTopic();
+    }
+  }, [user]);
+
+  const fetchRecommendedTopic = async () => {
+    const userDocRef = doc(collection(db, "users"), user.id);
+    const docSnap = await getDoc(userDocRef);
+
+    if (docSnap.exists()) {
+      const collections = docSnap.data().flashcards || [];
+      const topics = collections.map(col => col.name).join(", ");
+      const response = await fetch(`/api/generate?topics=${encodeURIComponent(topics)}`);
+      const data = await response.json();
+      setRecommendedTopic(data.recommendedTopic);
+    } else {
+      const response = await fetch(`/api/generate?topics=`);
+      const data = await response.json();
+      setRecommendedTopic(data.recommendedTopic);
+    }
+  };
 
   const handleSubmit = async () => {
     let inputData = text;
@@ -259,6 +283,16 @@ export default function Generate() {
               <Typography variant="h4" sx={{ color: '#E54792', fontWeight: 'bold', mb: 3 }}>
                 Generate Flashcards
               </Typography>
+              {recommendedTopic && (
+                <Box sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
+                  <Typography variant="h6" sx={{ color: '#0F9ED5', fontWeight: 'bold', mr: 2 }}>
+                    Recommended Topic:
+                  </Typography>
+                  <Button variant="contained" sx={{ backgroundColor: '#E54792', color: 'white', fontWeight: 'bold', borderRadius: 5 }} onClick={fetchRecommendedTopic}>
+                    {recommendedTopic}
+                  </Button>
+                </Box>
+              )}
               <Paper sx={{
                 p: 4,
                 width: "100%",
@@ -327,23 +361,33 @@ export default function Generate() {
                     }}
                   >
                     <MenuItem value="Arabic">Arabic</MenuItem>
+                    <MenuItem value="Assamese">Assamese</MenuItem>
                     <MenuItem value="Bengali">Bengali</MenuItem>
                     <MenuItem value="Chinese Mandarin">Chinese Mandarin</MenuItem>
                     <MenuItem value="English">English</MenuItem>
                     <MenuItem value="French">French</MenuItem>
                     <MenuItem value="German">German</MenuItem>
+                    <MenuItem value="Gujarati">Gujarati</MenuItem>
                     <MenuItem value="Hindi">Hindi</MenuItem>
                     <MenuItem value="Italian">Italian</MenuItem>
                     <MenuItem value="Japanese">Japanese</MenuItem>
+                    <MenuItem value="Kannada">Kannada</MenuItem>
                     <MenuItem value="Korean">Korean</MenuItem>
+                    <MenuItem value="Malayalam">Malayalam</MenuItem>
+                    <MenuItem value="Marathi">Marathi</MenuItem>
+                    <MenuItem value="Odia">Odia</MenuItem>
                     <MenuItem value="Portuguese">Portuguese</MenuItem>
+                    <MenuItem value="Punjabi">Punjabi</MenuItem>
                     <MenuItem value="Russian">Russian</MenuItem>
                     <MenuItem value="Spanish">Spanish</MenuItem>
+                    <MenuItem value="Tamil">Tamil</MenuItem>
+                    <MenuItem value="Telugu">Telugu</MenuItem>
+                    <MenuItem value="Urdu">Urdu</MenuItem>
                     <MenuItem value="Vietnamese">Vietnamese</MenuItem>
                   </Select>
                 </FormControl>
                 <Grid container spacing={3} sx={{ mb: 3 }}>
-                  <Grid item xs={12} sm={6}>
+                  <Grid item xs={12} sm={12}>
                     <TextField
                       value={numFlashcards}
                       onChange={(e) => setNumFlashcards(e.target.value)}
@@ -358,27 +402,7 @@ export default function Generate() {
                       }}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <FormControl fullWidth>
-                      <InputLabel sx={{ color: '#000' }}>Answer Type</InputLabel>
-                      <Select
-                        value={answerType}
-                        onChange={(e) => setAnswerType(e.target.value)}
-                        label="Answer Type"
-                        sx={{
-                          backgroundColor: '#E5F4FB', 
-                          '& .MuiOutlinedInput-root': { borderRadius: 8 },
-                          '& .MuiInputLabel-root': { color: '#000' }
-                        }}
-                      >
-                        <MenuItem value="True or False">True or False</MenuItem>
-                        <MenuItem value="Multiple Choice">Multiple Choice</MenuItem>
-                        <MenuItem value="Short Answer">Short Answer</MenuItem>
-                        <MenuItem value="One Word Answer">One Word Answer</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                </Grid>
+                </Grid>  
                 <FormControl fullWidth sx={{ mb: 3 }}>
                   <InputLabel sx={{ color: '#000' }}>Difficulty</InputLabel>
                   <Select
@@ -386,8 +410,8 @@ export default function Generate() {
                     onChange={(e) => setDifficulty(e.target.value)}
                     label="Difficulty"
                     sx={{
-                      backgroundColor: '#E5F4FB', 
-                      '& .MuiOutlinedInput-root': { borderRadius: 2 },
+                      backgroundColor: '#E5F4FB',
+                      '& .MuiOutlinedInput-root': { borderRadius: 8 },
                       '& .MuiInputLabel-root': { color: '#000' }
                     }}
                   >
@@ -396,170 +420,126 @@ export default function Generate() {
                     <MenuItem value="Hard">Hard</MenuItem>
                   </Select>
                 </FormControl>
-                <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                  <Button
-                    onClick={handleSubmit}
-                    variant="contained"
+
+                <FormControl fullWidth sx={{ mb: 3 }}>
+                  <InputLabel sx={{ color: '#000' }}>Answer Type</InputLabel>
+                  <Select
+                    value={answerType}
+                    onChange={(e) => setAnswerType(e.target.value)}
+                    label="Answer Type"
                     sx={{
-                      backgroundColor: '#E54792',
-                      color: 'white',
-                      fontWeight: 'bold',
-                      borderRadius: 5,
-                      textTransform: 'none',
-                      width: '200px'
+                      backgroundColor: '#E5F4FB',
+                      '& .MuiOutlinedInput-root': { borderRadius: 8 },
+                      '& .MuiInputLabel-root': { color: '#000' }
                     }}
                   >
-                    Generate
-                  </Button>
-                </Box>
+                    <MenuItem value="True or False">True or False</MenuItem>
+                    <MenuItem value="Multiple Choice">Multiple Choice</MenuItem>
+                    <MenuItem value="Short Answer">Short Answer</MenuItem>
+                    <MenuItem value="Picture">Picture</MenuItem>
+                  </Select>
+                </FormControl>
+
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleSubmit}
+                  sx={{
+                    backgroundColor: '#E54792',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    borderRadius: 5,
+                    mt: 2,
+                    mb: 2,
+                  }}
+                >
+                  Generate Flashcards
+                </Button>
               </Paper>
-              {flashcards.length > 0 && (
-                <Box sx={{ mt: 4, width: "100%" }}>
-                  <Typography variant="h4" sx={{ mb: 2, color: '#0F9ED5', fontWeight: 'bold', fontSize: '2rem' }}> {/* Réduction de la taille de la police */}
-                    Flashcards Preview
-                  </Typography>
-                  <Grid container spacing={2}>
-                    {flashcards.map((flashcard, index) => (
-                      <Grid item xs={12} sm={6} md={4} key={index}>
-                        <Card
-                          onClick={() => handleCardClick(index)}
-                          sx={{
-                            perspective: "1000px",
-                            transformStyle: "preserve-3d",
-                            transition: "transform 0.6s",
-                            boxShadow: 3,
-                            borderRadius: 8,
-                            backgroundColor: '#E5F4FB', 
-                          }}
-                        >
-                          <CardActionArea>
-                            <Box
-                              sx={{
-                                position: "relative",
-                                width: "100%",
-                                height: "200px",
-                                transform: flipped[index] ? "rotateY(180deg)" : "rotateY(0deg)",
-                                transformStyle: "preserve-3d",
-                                transition: "transform 0.6s",
-                              }}
-                            >
-                              <CardContent
-                                sx={{
-                                  position: "absolute",
-                                  width: "100%",
-                                  height: "100%",
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  alignItems: "center",
-                                  backgroundColor: "#0F9ED5",
-                                  color: "white",
-                                  borderRadius: 8,
-                                  backfaceVisibility: "hidden",
-                                  textAlign: "center",
-                                  overflowWrap: "break-word",
-                                  padding: 2,
-                                }}
-                              >
-                                <Typography
-                                  variant="h6"
-                                  sx={{
-                                    fontSize: { xs: '0.8rem', sm: '1.2rem', md: '1rem' }, 
-                                    lineHeight: 1.2,
-                                  }}
-                                >
-                                  {flashcard.front}
-                                </Typography>
-                              </CardContent>
-                              <CardContent
-                                sx={{
-                                  position: "absolute",
-                                  width: "100%",
-                                  height: "100%",
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  alignItems: "center",
-                                  backgroundColor: "#E54792",
-                                  color: "white",
-                                  borderRadius: 8,
-                                  backfaceVisibility: "hidden",
-                                  textAlign: "center",
-                                  overflowWrap: "break-word",
-                                  padding: 2,
-                                  transform: "rotateY(180deg)",
-                                }}
-                              >
-                                <Typography
-                                  variant="h6"
-                                  sx={{
-                                    fontSize: { xs: '0.8rem', sm: '1.2rem', md: '1rem' }, 
-                                    lineHeight: 1.2,
-                                  }}
-                                >
-                                  {flashcard.back}
-                                </Typography>
-                              </CardContent>
-                            </Box>
-                          </CardActionArea>
-                        </Card>
-                      </Grid>
-                    ))}
-                  </Grid>
-                  <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
-                    <Button
-                      onClick={handleOpen}
-                      variant="contained"
-                      sx={{
-                        backgroundColor: '#0F9ED5',
-                        color: 'white',
-                        fontWeight: 'bold',
-                        borderRadius: 5,
-                        textTransform: 'none',
-                        width: '200px'
-                      }}
-                    >
-                      Save Flashcards
-                    </Button>
-                  </Box>
-                  <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>Save Flashcards</DialogTitle>
-                    <DialogContent>
-                      <DialogContentText>
-                        Please enter a name for your flashcard collection:
-                      </DialogContentText>
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        label="Collection Name"
-                        fullWidth
-                        variant="outlined"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        sx={{
-                          backgroundColor: '#E5F4FB', 
-                          '& .MuiOutlinedInput-root': { borderRadius: 2 },
-                          '& .MuiInputLabel-root': { color: '#000' }
-                        }}
-                      />
-                    </DialogContent>
-                    <DialogActions>
-                      <Button onClick={handleClose} color="primary">
-                        Cancel
-                      </Button>
-                      <Button onClick={saveFlashcard} color="primary">
-                        Save
-                      </Button>
-                    </DialogActions>
-                  </Dialog>
-                </Box>
-              )}
             </Box>
+
+            {flashcards.length > 0 && (
+              <Box sx={{ mt: 4 }}>
+                <Typography variant="h5" sx={{ color: '#E54792', fontWeight: 'bold', mb: 3 }}>
+                  Generated Flashcards
+                </Typography>
+                <Grid container spacing={2}>
+                  {flashcards.map((flashcard, index) => (
+                    <Grid item xs={12} sm={6} md={4} key={index}>
+                      <Card
+                        onClick={() => handleCardClick(index)}
+                        sx={{
+                          backgroundColor: flipped[index] ? '#E54792' : '#0F9ED5',
+                          color: 'white',
+                          borderRadius: 5,
+                          boxShadow: 3,
+                          cursor: 'pointer',
+                        }}
+                      >
+                        <CardActionArea>
+                          <CardContent>
+                            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                              {flipped[index] ? flashcard.back : flashcard.front}
+                            </Typography>
+                          </CardContent>
+                        </CardActionArea>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleOpen}
+                  sx={{
+                    backgroundColor: '#E54792',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    borderRadius: 5,
+                    mt: 4,
+                  }}
+                >
+                  Save Flashcards
+                </Button>
+              </Box>
+            )}
+
+            <Dialog open={open} onClose={handleClose}>
+              <DialogTitle>Save Flashcards</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Enter a name for your flashcard collection.
+                </DialogContentText>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  label="Collection Name"
+                  fullWidth
+                  variant="outlined"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  sx={{
+                    backgroundColor: '#E5F4FB',
+                    '& .MuiOutlinedInput-root': { borderRadius: 8 },
+                    '& .MuiInputLabel-root': { color: '#000' }
+                  }}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} color="primary">
+                  Cancel
+                </Button>
+                <Button onClick={saveFlashcard} color="primary">
+                  Save
+                </Button>
+              </DialogActions>
+            </Dialog>
           </Container>
         </Container>
       </Box>
     </ThemeProvider>
   );
 }
-
 
 
 
