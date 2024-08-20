@@ -11,6 +11,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export default function Flashcards() {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -188,7 +189,7 @@ export default function Flashcards() {
               </Button>
             </>
           ) : (
-            <Button onClick={() => { /* Log out logic */ }} color="primary" variant="contained" sx={{ color: 'white', fontWeight: 'bold', borderRadius: 5, ml: 2 }}>
+            <Button onClick={() => { /* Log out logic */ }} color="secondary" variant="contained" sx={{ color: 'white', backgroundColor: '#E54792', fontWeight: 'bold', borderRadius: 5, ml: 2 }}>
               Log Out
             </Button>
           )}
@@ -201,6 +202,14 @@ export default function Flashcards() {
             <Typography variant="h4" sx={{ color: '#E54792', fontWeight: 'bold', mb: 4 }}>
               Your Flashcards Collection
             </Typography>
+            <Button
+              onClick={() => router.push('/generate')}
+              sx={{ mb: 4, backgroundColor: '#0F9ED5', color: 'white', fontWeight: 'bold', borderRadius: 2, ':hover': { backgroundColor: '#0D8CC7' } }}
+              variant="contained"
+              startIcon={<ArrowBackIcon />}
+            >
+              Back to Generate Flashcards
+            </Button>
             {collections.length === 0 ? (
               <Typography variant="h6" sx={{ color: '#E54792', textAlign: 'center', mt: 4, fontWeight: 'bold' }}>
                 No flashcards available, please create some.
@@ -209,10 +218,10 @@ export default function Flashcards() {
               <Grid container spacing={3} sx={{ mt: 4 }}>
                 {collections.map((collection, index) => (
                   <Grid item xs={12} sm={6} md={4} key={index}>
-                    <Card sx={{ boxShadow: 3 }}>
+                    <Card sx={{ boxShadow: 1, border: '1px solid transparent', borderRadius: 2 }}>
                       <CardActionArea onClick={() => handleCollectionClick(collection.name)}>
                         <CardContent>
-                          <Typography variant="h5" component="div">
+                          <Typography variant="h5" component="div" sx={{ color: 'white', backgroundColor: '#E54792', padding: 2, borderRadius: 2 }}>
                             {collection.name}
                           </Typography>
                         </CardContent>
@@ -285,7 +294,7 @@ export default function Flashcards() {
             <Grid container spacing={3} sx={{ mt: 4 }}>
               {flashcards.map((flashcard, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
-                  <Card sx={{ boxShadow: 3 }}>
+                  <Card sx={{ boxShadow: 1, border: 'none', borderRadius: 2 }}>
                     <CardActionArea onClick={() => handleCardClick(index)}>
                       <CardContent>
                         <Box
@@ -297,7 +306,6 @@ export default function Flashcards() {
                               position: 'relative',
                               width: '100%',
                               height: '200px',
-                              boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
                               transform: flipped[index]
                                 ? 'rotateY(180deg)'
                                 : 'rotateY(0deg)',
@@ -365,6 +373,3 @@ export default function Flashcards() {
     </Container>
   );
 }
-
-
-
