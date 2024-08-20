@@ -74,13 +74,13 @@ export async function POST(req) {
     const content = completion.choices[0].message.content;
     console.log('Response of the API:', content);
 
-    // Use regex to extract JSON part
+    
     const jsonMatch = content.match(/{[\s\S]*}/);
     if (jsonMatch) {
       const jsonString = jsonMatch[0];
       const flashcards = JSON.parse(jsonString);
 
-      // Check for "Picture" answer type and generate images
+    
       for (const flashcard of flashcards.flashcards) {
         if (flashcard.back.toLowerCase() === "picture") {
           flashcard.back = await generateImage(flashcard.front);
@@ -105,7 +105,7 @@ export async function GET(req) {
     const completion = await openai.chat.completions.create({
       model: "meta-llama/llama-3.1-8b-instruct:free",
       messages: [
-        { role: 'system', content: "You are a recommendation engine. Suggest a topic based on the given topics. You should answer in 1-3 words and nothing else. Answer in 1-3 words." },
+        { role: 'system', content: "You are a recommendation engine. Suggest a topic based on the given topics. You should answer in 1-3 words and nothing else. Answer in 1-3 words. If there are no given topics, then you can suggest a fun topic yourself but again answer in 1-3 words." },
         { role: 'user', content: topics },
       ],
     });
