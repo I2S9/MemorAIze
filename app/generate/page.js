@@ -480,7 +480,7 @@ export default function Generate() {
             {flashcards.length > 0 && (
               <Box sx={{ mt: 12, textAlign: 'center' }}>
                 <Typography variant="h6" sx={{ color: '#E54792', fontWeight: 'bold', textAlign: 'center', mb: 3, fontSize: '1.5rem' }}>
-                    Generated Flashcards
+                  Generated Flashcards
                 </Typography>
                 <Grid container spacing={2}>
                   {flashcards.map((flashcard, index) => (
@@ -491,13 +491,18 @@ export default function Generate() {
                           backgroundColor: flipped[index] ? '#E54792' : '#0F9ED5',
                           color: 'white',
                           borderRadius: 5,
-                          boxShadow: 3,
+                          border: '10px solid white', 
+                          boxShadow: 2, 
                           cursor: 'pointer',
+                          minHeight: '150px', 
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
                         }}
                       >
                         <CardActionArea>
                           <CardContent>
-                            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                            <Typography variant="h6" sx={{ fontWeight: 'normal' }}>
                               {flipped[index] ? flashcard.back : flashcard.front}
                             </Typography>
                           </CardContent>
@@ -521,6 +526,7 @@ export default function Generate() {
                   Save Flashcards
                 </Button>
               </Box>
+
             )}
 
             <Dialog open={open} onClose={handleClose}>
