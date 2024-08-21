@@ -304,19 +304,38 @@ export default function Generate() {
                 flexDirection: 'column',
                 alignItems: 'center'
               }}>
-                <FormControl component="fieldset" sx={{ mb: 3, border: '2px solid #E54792', borderRadius: 2, p: 2 }}>
-                <FormLabel component="legend" sx={{ color: '#000000', fontWeight: 'bold' }}>Input Type</FormLabel>
+              <FormControl component="fieldset" sx={{ mb: 3, borderRadius: 8, p: 2, backgroundColor: '#E54792', color: 'white' }}>
                 <RadioGroup
                   row
                   value={inputType}
                   onChange={(e) => setInputType(e.target.value)}
-                  sx={{ '& .MuiFormControlLabel-label': { color: '#000000', fontWeight: 'bold' } }}
+                  sx={{ 
+                    '& .MuiFormControlLabel-root': { 
+                      color: 'white', 
+                      fontWeight: 'bold',
+                      '& .MuiRadio-root': {
+                        color: 'white',
+                        '&.Mui-checked': {
+                          color: 'white'
+                        }
+                      }
+                    }
+                  }}
                 >
-                  <FormControlLabel value="topic" control={<Radio sx={{ color: '#E54792', '&.Mui-checked': { color: '#E54792' } }} />} label="Enter Topic" />
-                  <FormControlLabel value="pdf" control={<Radio sx={{ color: '#E54792', '&.Mui-checked': { color: '#E54792' } }} />} label="Upload PDF" />
+                  <FormControlLabel 
+                    value="topic" 
+                    control={<Radio />} 
+                    label="Enter Topic"
+                    sx={{ color: 'white' }} 
+                  />
+                  <FormControlLabel 
+                    value="pdf" 
+                    control={<Radio />} 
+                    label="Upload PDF"
+                    sx={{ color: 'white' }} 
+                  />
                 </RadioGroup>
               </FormControl>
-
                 {inputType === "topic" ? (
                   <TextField
                     value={text}
