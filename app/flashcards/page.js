@@ -221,7 +221,7 @@ export default function Flashcards() {
                     <Card sx={{ boxShadow: 1, borderRadius: 2 }}>
                       <CardActionArea onClick={() => handleCollectionClick(collection.name)}>
                         <CardContent>
-                          <Typography variant="h5" component="div" sx={{ color: 'white', backgroundColor: '#E54792', padding: 4, borderRadius: 2 }}>
+                          <Typography variant="h5" component="div" sx={{ color: 'white', backgroundColor: '#E54792', padding: 6, borderRadius: 0 }}>
                             {collection.name}
                           </Typography>
                         </CardContent>
