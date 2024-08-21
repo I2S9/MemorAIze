@@ -459,9 +459,9 @@ export default function Generate() {
             </Box>
 
             {flashcards.length > 0 && (
-              <Box sx={{ mt: 10 }}>
-                <Typography variant="h6" sx={{ color: '#E54792', fontWeight: 'bold', mb: 5 }}>
-                  Generated Flashcards
+              <Box sx={{ mt: 12, textAlign: 'center' }}>
+                <Typography variant="h6" sx={{ color: '#E54792', fontWeight: 'bold', textAlign: 'center', mb: 3, fontSize: '1.5rem' }}>
+                    Generated Flashcards
                 </Typography>
                 <Grid container spacing={2}>
                   {flashcards.map((flashcard, index) => (
