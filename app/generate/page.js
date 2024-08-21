@@ -459,8 +459,8 @@ export default function Generate() {
             </Box>
 
             {flashcards.length > 0 && (
-              <Box sx={{ mt: 4 }}>
-                <Typography variant="h5" sx={{ color: '#E54792', fontWeight: 'bold', mb: 3 }}>
+              <Box sx={{ mt: 10 }}>
+                <Typography variant="h6" sx={{ color: '#E54792', fontWeight: 'bold', mb: 5 }}>
                   Generated Flashcards
                 </Typography>
                 <Grid container spacing={2}>
@@ -540,6 +540,3 @@ export default function Generate() {
     </ThemeProvider>
   );
 }
-
-
-
